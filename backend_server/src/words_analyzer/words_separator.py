@@ -1,3 +1,4 @@
+import os
 from typing import List
 from nltk.corpus import wordnet
 
@@ -33,7 +34,8 @@ def lyrics_to_strophes(lyrics: str) -> List[str]:
     """
     Separates a song lyrics to strophes 
     """
-    pass
+    output = lyrics.split("""\n\n""")
+    return output
 
 def verse_to_word_array(verse: str) -> List[str]:
     """

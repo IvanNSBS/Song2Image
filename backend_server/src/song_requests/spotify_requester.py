@@ -8,18 +8,6 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 client_credentials_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
 
-def get_song_features(song_name: str):
-    search_query = song_name # string to search
-    limit_results = 1 # limit of results to be returned, min = 1, none = 10, max = 50
-    offset = 0 # first item to be returned
-    song_type =  "track" #type can be = track,playlist,show,episode,album; can be passed with comma multiple types.
-    market = "US" # available markets to search with country code, separating by comma, None = all
-
-    search_result = sp.search(search_query, limit_results, offset, song_type, market)
-    track_id = search_result["tracks"]["items"][0]["id"]
-    audio_features = sp.audio_features({track_id})
-
-    return audio_features
 
 def clamp(value:int, min_val: int, max_val:int):
     if value < min_val:
@@ -28,6 +16,16 @@ def clamp(value:int, min_val: int, max_val:int):
         value = max_val
     else:
         return value
+
+def get_song_features(track_id: str):
+    audio_features = sp.audio_features({track_id})
+    return audio_features
+
+def get_track_artist_and_name(track_id: str):
+    track_info = sp.track(track_id)
+    name = track_info['name']
+    artist = track_info['artists'][0]['name']
+    return name, artist
 
 def search_for_songs_with_input(query: str, max_outputs=2):
     search_query = query # string to search
@@ -48,11 +46,7 @@ def search_for_songs_with_input(query: str, max_outputs=2):
             'song_name': song['name'],
             'artist': song['artists'][0]['name'],
             'track_id': song['id'],
-            'audio_features': sp.audio_features({song['id']})
         }
         output.append(content)
-
-    # track_id = search_result["tracks"]["items"][0]["id"]
-    # audio_features = sp.audio_features({track_id})
 
     return output

@@ -1,9 +1,14 @@
 import json
 from klein import Klein
+from words_analyzer.word_calculator import get_most_similar_words
 from words_analyzer.words_separator import lyrics_to_strophes
 from song_requests.azapi_requester import get_song_by_title
 from song_requests.musixmatch_requester import get_song_snippet
-from song_requests.spotify_requester import get_song_features, search_for_songs_with_input
+from song_requests.spotify_requester import ( 
+    get_song_features, 
+    search_for_songs_with_input,
+    get_track_artist_and_name
+)
 
 class MusicalBackendServer(object):
     """
@@ -24,7 +29,7 @@ class MusicalBackendServer(object):
         request.setResponseCode(code)
         return msg
 
-    def _get_song_lyrics(self, title, artist):
+    def _get_song_lyrics(self, title, artist=""):
         """
         Route that gets the song info, given the song title
 
@@ -32,6 +37,10 @@ class MusicalBackendServer(object):
         """
         _, _, lyrics = get_song_by_title(title, artist)
         return lyrics
+
+    def _get_dalle_input_for_strophe(self, snippet, strophe):
+        words = get_most_similar_words(musixmatch_phrase=snippet, song_verse=strophe, max_words=5)
+        return words
 
     def _get_song_snippet(self, song_title, artist=""):
         snippet = get_song_snippet(song_title, artist)
@@ -49,20 +58,25 @@ class MusicalBackendServer(object):
 
         return self._response(request, 200, json.dumps(songs_found, indent=4))
 
-    @app.route('/fetch_all_info/<string:song_title>/<string:artist>', methods=['GET'])
-    def get_song_snippet_and_strophes(self, request, song_title, artist):
-        snippet = self._get_song_snippet(song_title, artist)
-        lyrics = self._get_song_lyrics(song_title, artist)
+    @app.route('/prepare_dalle/<string:track_id>', methods=['GET'])
+    def get_song_snippet_and_strophes(self, request, track_id):
+        msg = dict()
+        song_name, artist = get_track_artist_and_name(track_id=track_id)
+        song_features = get_song_features(track_id=track_id)
 
+        snippet = self._get_song_snippet(song_name, artist)
+        lyrics = self._get_song_lyrics(song_name, artist)
         strophes = lyrics_to_strophes(lyrics)
-        song_features = []
-        dalle_input = []
-
+        
+        output = []
         for strophe in strophes:
+            words = self._get_dalle_input_for_strophe(snippet, strophe)
             content = {
-                "strophe": strophe,
-                "input": ""
+                'dalle_input': words,
+                'strophe': strophe
             }
-            dalle_input.append(content)
+            output.append(content)
 
-        return self._response(request, 200, json.dumps(dalle_input))
+        msg['snippet'] = snippet
+        msg['dalle_data'] = output
+        return self._response(request, 200, json.dumps(msg, indent=4))
