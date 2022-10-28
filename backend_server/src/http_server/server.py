@@ -1,5 +1,6 @@
 import json
 from klein import Klein
+from words_analyzer.words_separator import lyrics_to_strophes
 from song_requests.azapi_requester import get_song_by_title
 from song_requests.musixmatch_requester import get_song_snippet
 from song_requests.spotify_requester import get_song_features, search_for_songs_with_input
@@ -53,8 +54,15 @@ class MusicalBackendServer(object):
         snippet = self._get_song_snippet(song_title, artist)
         lyrics = self._get_song_lyrics(song_title, artist)
 
-        strophes = []
+        strophes = lyrics_to_strophes(lyrics)
         song_features = []
         dalle_input = []
+
+        for strophe in strophes:
+            content = {
+                "strophe": strophe,
+                "input": ""
+            }
+            dalle_input.append(content)
 
         return self._response(request, 200, json.dumps(dalle_input))

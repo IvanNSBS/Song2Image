@@ -1,6 +1,6 @@
 from typing import List
 from nltk.corpus import wordnet
-from words_analyzer.words_separator import musixmatch_phrase_to_array, verse_to_word_array
+from words_analyzer.words_separator import musixmatch_snippet_to_array, verse_to_word_array
 
 
 def calculate_similarity(word_1: str, word_2: str) -> float:
@@ -49,7 +49,7 @@ def get_most_similar_words(musixmatch_phrase:str, song_verse: str, max_words: in
     :input song_verse: A verse of the given song
     :input max_words(str): Limits how many worlds will be returned in the outpuit to this value
     """
-    musixmatch_words = musixmatch_phrase_to_array(musixmatch_phrase)
+    musixmatch_words = musixmatch_snippet_to_array(musixmatch_phrase)
     musixmatch_words_len = len(musixmatch_words)
     verse_words = verse_to_word_array(song_verse)
     output_length = max_words if max_words <= musixmatch_words_len else musixmatch_words_len

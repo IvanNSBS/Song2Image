@@ -18,16 +18,22 @@ def _remove_words_that_arent_on_wordnet(words: List[str]):
     print(f"Removed words that were not on wordnet: {invalid_words}")
     return valid_words, invalid_words
 
-def musixmatch_phrase_to_array(phrase: str) -> List[str]:
+def musixmatch_snippet_to_array(phrase: str) -> List[str]:
     """
     Converts the musixmatch snippet to an array of strings
-    with all the snippet words that are available in wordnaet
+    with all the snippet words that are available in wordnet
     """
     split = phrase.split(" ")
     output = [ _remove_invalid_characters_from_word(word) for word in split ]
 
     output, _ = _remove_words_that_arent_on_wordnet(output)
     return output
+
+def lyrics_to_strophes(lyrics: str) -> List[str]:
+    """
+    Separates a song lyrics to strophes 
+    """
+    pass
 
 def verse_to_word_array(verse: str) -> List[str]:
     """
