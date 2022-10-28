@@ -23,41 +23,38 @@ class MusicalBackendServer(object):
         request.setResponseCode(code)
         return msg
 
-    @app.route('/song_info/<string:song_title>', methods=['GET'])
-    def get_song_info(self, request, song_title):
+    def _get_song_lyrics(self, title, artist):
         """
         Route that gets the song info, given the song title
 
         :input song_title(str): The title of the song that we want the info from
         """
-        title, artist, lyrics = get_song_by_title("Fear of the Dark")
+        _, _, lyrics = get_song_by_title(title, artist)
+        return lyrics
 
-        return self._response(request, 200, f"Lyrics for {song_title}:\n{lyrics}")
-
-    @app.route('/snippet/<string:song_title>/<string:artist>', methods=['GET'])
-    def get_song_snippet(self, request, song_title, artist=""):
+    def _get_song_snippet(self, song_title, artist=""):
         snippet = get_song_snippet(song_title, artist)
-
-        return self._response(request, 200, f"Song snippet: {snippet}")
-
-    @app.route('/features/<string:song_title>', methods=['GET'])
-    def get_song_features(self, request, song_title):
-        features = get_song_features(song_title)
-
-        return self._response(request, 200, f"Features: {json.dumps(features)}")
+        return snippet
 
     @app.route('/search_song/<string:search_query>', methods=['GET'])
     def search_song_with_spotify(self, request, search_query):
         songs_found = search_for_songs_with_input(search_query)
 
-        return self._response(request, 200, f"Found songs: {json.dumps(songs_found, indent=4)}")
+        return self._response(request, 200, json.dumps(songs_found, indent=4))
 
     @app.route('/search_song/<string:search_query>/<int:max_output>', methods=['GET'])
     def search_song_with_spotify_with_max_output(self, request, search_query, max_output):
         songs_found = search_for_songs_with_input(search_query, max_output)
 
-        return self._response(request, 200, f"Found songs: {json.dumps(songs_found, indent=4)}")
+        return self._response(request, 200, json.dumps(songs_found, indent=4))
 
     @app.route('/fetch_all_info/<string:song_title>/<string:artist>', methods=['GET'])
-    def get_all_song_info(self, request, song_title, artist):
-        pass
+    def get_song_snippet_and_strophes(self, request, song_title, artist):
+        snippet = self._get_song_snippet(song_title, artist)
+        lyrics = self._get_song_lyrics(song_title, artist)
+
+        strophes = []
+        song_features = []
+        dalle_input = []
+
+        return self._response(request, 200, json.dumps(dalle_input))
