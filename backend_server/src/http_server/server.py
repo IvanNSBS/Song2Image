@@ -1,6 +1,8 @@
+import json
 from klein import Klein
 from song_requests.azapi_requester import get_song_by_title
 from song_requests.musixmatch_requester import get_song_snippet
+from song_requests.spotify_requester import get_song_features
 
 class MusicalBackendServer(object):
     """
@@ -36,3 +38,8 @@ class MusicalBackendServer(object):
         snippet = get_song_snippet(song_title, artist)
 
         return self._response(request, 200, f"Song snippet: {snippet}")
+
+    @app.route('/features/<string:song_title>', methods=['GET'])
+    def get_song_features(self, request, song_title):
+        features = get_song_features(song_title)
+        return self._response(request, 200, f"Features: {json.dumps(features)}")
