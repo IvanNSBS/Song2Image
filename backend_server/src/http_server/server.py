@@ -2,7 +2,7 @@ import json
 from klein import Klein
 from song_requests.azapi_requester import get_song_by_title
 from song_requests.musixmatch_requester import get_song_snippet
-from song_requests.spotify_requester import get_song_features
+from song_requests.spotify_requester import get_song_features, search_for_songs_with_input
 
 class MusicalBackendServer(object):
     """
@@ -31,6 +31,7 @@ class MusicalBackendServer(object):
         :input song_title(str): The title of the song that we want the info from
         """
         title, artist, lyrics = get_song_by_title("Fear of the Dark")
+
         return self._response(request, 200, f"Lyrics for {song_title}:\n{lyrics}")
 
     @app.route('/snippet/<string:song_title>/<string:artist>', methods=['GET'])
@@ -42,4 +43,21 @@ class MusicalBackendServer(object):
     @app.route('/features/<string:song_title>', methods=['GET'])
     def get_song_features(self, request, song_title):
         features = get_song_features(song_title)
+
         return self._response(request, 200, f"Features: {json.dumps(features)}")
+
+    @app.route('/search_song/<string:search_query>', methods=['GET'])
+    def search_song_with_spotify(self, request, search_query):
+        songs_found = search_for_songs_with_input(search_query)
+
+        return self._response(request, 200, f"Found songs: {json.dumps(songs_found, indent=4)}")
+
+    @app.route('/search_song/<string:search_query>/<int:max_output>', methods=['GET'])
+    def search_song_with_spotify_with_max_output(self, request, search_query, max_output):
+        songs_found = search_for_songs_with_input(search_query, max_output)
+
+        return self._response(request, 200, f"Found songs: {json.dumps(songs_found, indent=4)}")
+
+    @app.route('/fetch_all_info/<string:song_title>/<string:artist>', methods=['GET'])
+    def get_all_song_info(self, request, song_title, artist):
+        pass
