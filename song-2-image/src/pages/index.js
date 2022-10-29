@@ -70,7 +70,7 @@ const Home = () => {
   useEffect(() => {
     if (selectedMusic != -1) {
       axios
-        .post(
+        .get(
           `http://localhost:9000/prepare_dalle/${musicResults[selectedMusic].track_id}`
         )
         .then((res) => {
