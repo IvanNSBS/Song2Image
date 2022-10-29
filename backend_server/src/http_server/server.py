@@ -72,7 +72,7 @@ class MusicalBackendServer(object):
         for strophe in strophes:
             words = self._get_dalle_input_for_strophe(snippet, strophe)
             content = {
-                'dalle_input': words,
+                'dalle_input': " ".join(words),
                 'strophe': strophe
             }
             output.append(content)
