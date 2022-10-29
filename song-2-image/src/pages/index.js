@@ -89,6 +89,18 @@ const Home = () => {
       .then((res) => {});
   };
 
+  useEffect(() => {
+    if (selectedMusic != -1) {
+      axios
+        .post(
+          `http://localhost:9000/prepare_dalle/${musicResults[selectedMusic].track_id}`
+        )
+        .then((res) => {
+          console.log(res);
+        });
+    }
+  }, [selectedMusic]);
+
   const getDalle2 = () => {
     if (dalleToken != "" && dalleQuery != "") {
       setError(false);
@@ -116,9 +128,12 @@ const Home = () => {
   };
 
   const dropdownOptions = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
+    { value: "digital art of", label: "Digital Art" },
+    { value: "gothic painting of", label: "Gothic" },
+    { value: "horror painting of", label: "Horror" },
+    { value: "medieval painting of", label: "Medieval" },
+    { value: "oil painting of", label: "Oil Painting" },
+    { value: "renaissance painting of", label: "Renaissance" },
   ];
 
   const renderLogin = () => {
@@ -190,7 +205,7 @@ const Home = () => {
                   />
                   <GenerationColumnContainer>
                     <Button
-                      disabled={!ambience || !artStyle}
+                      disabled={!artStyle}
                       label="Gerar imagens"
                       handleClick={() => searchMusic()}
                     />
