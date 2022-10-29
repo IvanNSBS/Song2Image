@@ -30,6 +30,8 @@ const Home = () => {
   const [musicQuery, setMusicQuery] = useState("");
   const [musicResults, setMusicResults] = useState([]);
   const [selectedMusic, setSelectedMusic] = useState(-1);
+  const [artStyle, setArtStyle] = useState("");
+  const [ambience, setAmbience] = useState("");
   const [dalleQuery, setDalleQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -130,6 +132,8 @@ const Home = () => {
     );
   };
 
+  console.log(artStyle);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -152,7 +156,7 @@ const Home = () => {
                     onChange={(e) => setMusicQuery(e.target.value)}
                   />
                   <Button
-                    disabled={musicQuery == ""}
+                    disabled={!musicQuery}
                     label="Pesquisar"
                     handleClick={() => searchMusic()}
                   />
@@ -178,27 +182,33 @@ const Home = () => {
             ) : (
               <GenerationColumnContainer>
                 <GenerationRowContainer>
-                  <Card />
+                  <Card
+                    image={musicResults[selectedMusic].album_icon_preview_url}
+                    song={musicResults[selectedMusic].song_name}
+                    artist={musicResults[selectedMusic].artist}
+                    album={musicResults[selectedMusic].album}
+                  />
                   <GenerationColumnContainer>
                     <Button
-                      disabled={musicQuery == ""}
+                      disabled={!ambience || !artStyle}
                       label="Gerar imagens"
                       handleClick={() => searchMusic()}
                     />
                     <Select
                       options={dropdownOptions}
                       placeholder="Estilo de arte"
+                      onChange={(e) => setArtStyle(e.value)}
                     />
                   </GenerationColumnContainer>
                 </GenerationRowContainer>
                 <InputField
                   placeholder="Descreva o ambiente..."
-                  onChange={(e) => setMusicQuery(e.target.value)}
+                  onChange={(e) => setAmbience(e.target.value)}
                 />
               </GenerationColumnContainer>
             )
           ) : (
-            renderLoginUI()
+            renderLogin()
           )}
         </PageContainer>
       </StyledMain>
