@@ -11,10 +11,13 @@ export default function Home() {
   const token = process.env.NEXT_PUBLIC_DALLE_TOKEN;
   const [musicQuery, setMusicQuery] = useState("");
   const [musicResults, setMusicResults] = useState([]);
+  const [selectedMusic, setSelectedMusic] = useState(-1);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  console.log(selectedMusic);
 
   const searchMusic = () => {
     if(musicQuery != "") {
@@ -74,7 +77,7 @@ export default function Home() {
             />
           </SearchContainer>
         <CardsContainer>
-          {musicResults.map((music) => {
+          {musicResults.map((music, index) => {
             return (
               <Card
                 key={music.song_name + music.artist}
@@ -82,6 +85,7 @@ export default function Home() {
                 song={music.song_name}
                 artist={music.artist}
                 album={music.album}
+                handleClick={() => setSelectedMusic(index)}
               /> 
             );
           })}
