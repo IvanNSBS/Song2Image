@@ -55,36 +55,13 @@ const Home = () => {
 
   useEffect(() => {
     if (spotifyToken) {
-      postSpotifyToken();
+      postSpotifyToken(spotifyToken);
     }
   }, [spotifyToken]);
 
   const logout = () => {
     setSpotifyToken("");
     window.localStorage.removeItem("token");
-  };
-
-  const redirectToSpotify = () => {
-    window.open(
-      `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`,
-      "_self"
-    );
-  };
-
-  const searchMusic = () => {
-    if (musicQuery != "") {
-      axios
-        .get(`http://localhost:9000/search_song/${musicQuery}/6`)
-        .then((res) => {
-          setMusicResults(res.data);
-        });
-    }
-  };
-
-  const postSpotifyToken = () => {
-    axios
-      .post(`http://localhost:9000/spotify_token/${spotifyToken}`)
-      .then((res) => {});
   };
 
   const getDalle2 = () => {
@@ -124,28 +101,15 @@ const Home = () => {
       <LoginContainer>
         <Button
           label="Login to spotify"
-          handleClick={() => redirectToSpotify()}
+          handleClick={() => redirectToSpotify(AUTH_ENDPOINT, CLIENT_ID, REDIRECT_URI, RESPONSE_TYPE)}
         />
       </LoginContainer>
     );
   };
 
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Music to Image</title>
-      </Head>
-      <StyledMain>
-        {spotifyToken && (
-          <LogoutContainer>
-            <Button label="Logout" handleClick={() => logout()} />
-          </LogoutContainer>
-        )}
-        <PageContainer>
-          <StyledTitle>Music to Image</StyledTitle>
-          {spotifyToken ? (
-            selectedMusic == -1 ? (
-              <React.Fragment>
+  const renderMusicSearch = () => {
+    return (
+      <React.Fragment>
                 <SearchContainer>
                   <InputField
                     placeholder="Pesquise uma música..."
@@ -154,12 +118,14 @@ const Home = () => {
                   <Button
                     disabled={musicQuery == ""}
                     label="Pesquisar"
-                    handleClick={() => searchMusic()}
+                    handleClick={() => setMusicResults( searchMusic(musicQuery).data )}
                   />
                 </SearchContainer>
-                <StyledSelectionLable>
-                  Selecione a música desejada
-                </StyledSelectionLable>
+                {(musicResults.length > 0) &&
+                  <StyledSelectionLable>
+                    Selecione a música desejada
+                  </StyledSelectionLable>
+                }
                 <CardsContainer>
                   {musicResults.map((music, index) => {
                     return (
@@ -175,8 +141,12 @@ const Home = () => {
                   })}
                 </CardsContainer>
               </React.Fragment>
-            ) : (
-              <GenerationColumnContainer>
+    );
+  };
+
+  const renderGenerationSettings = () => {
+    return (
+      <GenerationColumnContainer>
                 <GenerationRowContainer>
                   <Card />
                   <GenerationColumnContainer>
@@ -196,9 +166,30 @@ const Home = () => {
                   onChange={(e) => setMusicQuery(e.target.value)}
                 />
               </GenerationColumnContainer>
+    );
+  };
+
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>Music to Image</title>
+      </Head>
+      <StyledMain>
+        {spotifyToken && (
+          <LogoutContainer>
+            <Button label="Logout" handleClick={() => logout()} />
+          </LogoutContainer>
+        )}
+        <PageContainer>
+          <StyledTitle>Music to Image</StyledTitle>
+          {spotifyToken ? (
+            (selectedMusic == -1) ? (
+              renderMusicSearch()
+            ) : (
+              renderGenerationSettings()
             )
           ) : (
-            renderLoginUI()
+            renderLogin()
           )}
         </PageContainer>
       </StyledMain>
