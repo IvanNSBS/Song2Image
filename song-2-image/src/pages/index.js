@@ -56,7 +56,8 @@ const Home = () => {
 
   const redirectToSpotify = () => {
     window.open(
-      `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`
+      `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`,
+      "_self"
     );
   };
 

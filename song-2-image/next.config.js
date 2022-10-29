@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ["place.dog", "i.scdn.co"],
   },
+  compiler: {
+    styledComponents: true,
+  },
 };
 
 module.exports = nextConfig;
