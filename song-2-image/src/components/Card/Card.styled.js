@@ -3,17 +3,15 @@ import Image from "next/image";
 
 export const StyledCard = styled.div`
   display: flex;
-  flex-basis: 30%;
   align-items: center;
   width: 335px;
   padding: 10px;
-  margin: 5px auto;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 3px solid #333333;
   border-radius: 8px;
   cursor: pointer;
 
-  &:hover{
+  &:hover {
     border: 3px solid gray;
   }
 `;
@@ -35,7 +33,7 @@ export const TextContainer = styled.div`
 `;
 
 export const CardText = styled.span`
-  font-family: 'Piazzolla';
+  font-family: "Piazzolla";
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
