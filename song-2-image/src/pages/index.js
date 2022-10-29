@@ -3,15 +3,29 @@ import { useState } from "react";
 import Button from "../components/Button/Button";
 import Card from "../components/Card/Card";
 import InputField from "../components/InputField/InputField";
-
 import styles from "../styles/Home.module.css";
+import axios from "axios";
 
 export default function Home() {
   const token = process.env.NEXT_PUBLIC_DALLE_TOKEN;
+  const [musicQuery, setMusicQuery] = useState("");
+  const [musicResults, setMusicResults] = useState([]);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+
+
+  function searchMusic() {
+    if(musicQuery != "") {
+      axios.get(`http://localhost:9000/search_song/${musicQuery}/6`)
+      .then((res) => {
+        setMusicResults(res.data);
+        console.log(musicResults);
+      });
+    }
+  }
 
   function getDalle2() {
     if(token != "" && query != "") {
@@ -50,8 +64,15 @@ export default function Home() {
           Music to Image
         </h1>
         <div style={{display: "flex", direction: "row", marginTop: "40px", gap: "10px", height: "52px"}}>
-          <InputField placeholder="Pesquise uma música..."/>
-          <Button label="Pesquisar" handleClick={()=> console.log("Teste")} />
+          <InputField 
+            placeholder="Pesquise uma música..."
+            onChange={(e) => setMusicQuery(e.target.value)}
+          />
+          <Button 
+            disabled={musicQuery == ""}
+            label="Pesquisar" 
+            handleClick={()=> searchMusic()} 
+          />
         </div>
         <div>
           <Card />
