@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const StyledButton = styled.button`
   display: flex;
-  opacity: ${props => (props.disabled ? 0.4 : "unset")};
+  opacity: ${props => (props.disabled ? 0.4 : 1)};
   cursor: ${props => (props.disabled ? "not-allowd" : "pointer")};
   border: none;
   border-radius: 10px;
