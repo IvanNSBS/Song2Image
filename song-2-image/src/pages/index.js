@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Button from "../components/Button/Button";
 import Card from "../components/Card/Card";
 import InputField from "../components/InputField/InputField";
+import Select from "react-select";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
 import {
@@ -14,6 +15,7 @@ import {
   StyledMain,
   StyledTitle,
 } from "./index.styles";
+import Dropdown from "../components/Dropdown/Dropdown";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -109,6 +111,12 @@ const Home = () => {
     }
   };
 
+  const dropdownOptions = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+  ];
+
   return (
     <div className={styles.container}>
       <Head>
@@ -122,6 +130,7 @@ const Home = () => {
         )}
         <PageContainer>
           <StyledTitle>Music to Image</StyledTitle>
+          <Select options={dropdownOptions} />
           {spotifyToken ? (
             <React.Fragment>
               <SearchContainer>
