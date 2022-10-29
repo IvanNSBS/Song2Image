@@ -25,56 +25,7 @@ const Home = () => {
 
   const [spotifyToken, setSpotifyToken] = useState("");
   const [musicQuery, setMusicQuery] = useState("");
-  const [musicResults, setMusicResults] = useState([
-    {
-        "song_duration": 438120,
-        "album": "Fear of the Dark (2015 - Remaster)",
-        "album_icon_preview_url": "https://i.scdn.co/image/ab67616d0000b273c8783655136b2725c5c7f564",
-        "song_name": "Fear of the Dark - 2015 Remaster",
-        "artist": "Iron Maiden",
-        "track_id": "0h4rVZcOiSaL9b5mT1A2gq"
-    },
-    {
-        "song_duration": 461075,
-        "album": "Rock in Rio (Live; 2015 Remastered Version)",
-        "album_icon_preview_url": "https://i.scdn.co/image/ab67616d0000b27369d8c6b974bebcece6aaa6c8",
-        "song_name": "Fear of the Dark - Live at Rock in Rio; 2015 Remastered Version",
-        "artist": "Iron Maiden",
-        "track_id": "4IJZy9joZpC7ToPRpSJ4mb"
-    },
-    {
-        "song_duration": 429386,
-        "album": "Hero",
-        "album_icon_preview_url": "https://i.scdn.co/image/ab67616d0000b2738ce46c672e53a3b201b649a5",
-        "song_name": "Fear of the Dark",
-        "artist": "Van Canto",
-        "track_id": "0dKtXWDvxOkxFjstDgQZmB"
-    },
-    {
-        "song_duration": 223548,
-        "album": "Fear of the Dark",
-        "album_icon_preview_url": "https://i.scdn.co/image/ab67616d0000b2736de865292c98f577bedb4ca4",
-        "song_name": "Fear of the Dark",
-        "artist": "ConKi",
-        "track_id": "6HRxngZoLiaEnf7Sh4UC6s"
-    },
-    {
-        "song_duration": 245813,
-        "album": "Hurt for Me",
-        "album_icon_preview_url": "https://i.scdn.co/image/ab67616d0000b273ea0d1320e90292f7d2403122",
-        "song_name": "Fear of the Water",
-        "artist": "SYML",
-        "track_id": "3jVniYVNCrwQvvWJpReosr"
-    },
-    {
-        "song_duration": 205969,
-        "album": "Amnesia",
-        "album_icon_preview_url": "https://i.scdn.co/image/ab67616d0000b273d98e2ce4bd12c3072fe9e7e8",
-        "song_name": "Daylight",
-        "artist": "5 Seconds of Summer",
-        "track_id": "0s8XyNiZlOjH2uerXGwV6P"
-    }
-]);
+  const [musicResults, setMusicResults] = useState([]);
   const [selectedMusic, setSelectedMusic] = useState(-1);
   const [dalleQuery, setDalleQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -172,7 +123,7 @@ const Home = () => {
         )}
         <PageContainer>
           <StyledTitle>Music to Image</StyledTitle>
-          {spotifyToken ? (
+          {true ? (
             <React.Fragment>
               <SearchContainer>
                 <InputField
