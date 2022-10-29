@@ -132,8 +132,6 @@ const Home = () => {
     );
   };
 
-  console.log(artStyle);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -161,9 +159,11 @@ const Home = () => {
                     handleClick={() => searchMusic()}
                   />
                 </SearchContainer>
-                <StyledSelectionLable>
-                  Selecione a música desejada
-                </StyledSelectionLable>
+                {musicResults.length > 0 && (
+                  <StyledSelectionLable>
+                    Selecione a música desejada
+                  </StyledSelectionLable>
+                )}
                 <CardsContainer>
                   {musicResults.map((music, index) => {
                     return (
