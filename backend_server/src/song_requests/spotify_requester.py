@@ -10,7 +10,7 @@ sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
 
 def override_spotipy(token:str):
     global sp
-    sp = spotipy.Spotify(auth=token)
+    sp = spotipy.Spotify(auth=token,client_credentials_manager=client_credentials_manager)
 
 def clamp(value:int, min_val: int, max_val:int):
     if value < min_val:
