@@ -46,14 +46,14 @@ const Home = () => {
       window.localStorage.setItem("token", token);
     }
 
-    setSpotifyToken(token)
-  }, [])
+    setSpotifyToken(token);
+  }, []);
 
   useEffect(() => {
-    if(spotifyToken){
-      postSpotifyToken()
+    if (spotifyToken) {
+      postSpotifyToken();
     }
-  },[spotifyToken])
+  }, [spotifyToken]);
 
   const logout = () => {
     setSpotifyToken("");
@@ -73,17 +73,15 @@ const Home = () => {
         .get(`http://localhost:9000/search_song/${musicQuery}/6`)
         .then((res) => {
           setMusicResults(res.data);
-          console.log(musicResults);
         });
     }
   };
 
   const postSpotifyToken = () => {
-      axios.post(`http://localhost:9000/spotify_token/${spotifyToken}`)
-      .then((res) => {
-        console.log(res);
-      });
-  }
+    axios
+      .post(`http://localhost:9000/spotify_token/${spotifyToken}`)
+      .then((res) => {});
+  };
 
   const getDalle2 = () => {
     if (dalleToken != "" && dalleQuery != "") {
@@ -110,8 +108,6 @@ const Home = () => {
       setError(true);
     }
   };
-
-  console.log(spotifyToken) //DELETE LATER
 
   return (
     <div className={styles.container}>
