@@ -23,7 +23,7 @@ import {
   postSpotifyToken,
   redirectToSpotify,
   searchMusic,
-} from "../Util/Index";
+} from "../utils";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -139,7 +139,9 @@ const Home = () => {
           <Button
             disabled={!musicQuery}
             label="Pesquisar"
-            handleClick={() => setMusicResults(searchMusic(musicQuery).data)}
+            handleClick={() =>
+              searchMusic(musicQuery).then((res) => setMusicResults(res.data))
+            }
           />
         </SearchContainer>
         {musicResults.length > 0 && (
