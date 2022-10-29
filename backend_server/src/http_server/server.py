@@ -15,7 +15,8 @@ from song_requests.spotify_requester import (
     search_for_songs_with_input,
     get_track_artist_and_name,
     override_spotipy,
-    get_track_duration
+    get_track_duration,
+    get_adjective_from_valence
 )
 
 class MusicalBackendServer(object):
@@ -128,7 +129,7 @@ class MusicalBackendServer(object):
     def get_song_snippet_and_strophes(self, request, track_id):
         msg = dict()
         song_name, artist = get_track_artist_and_name(track_id=track_id)
-        song_features = get_song_features(track_id=track_id)
+        adjective = get_adjective_from_valence(track_id=track_id)
 
         snippet = self._get_song_snippet(song_name, artist)
         lyrics = self._get_song_lyrics(song_name, artist)
@@ -138,7 +139,7 @@ class MusicalBackendServer(object):
         for strophe in strophes:
             words = self._get_dalle_input_for_strophe(snippet, strophe)
             content = {
-                'dalle_input': " ".join(words),
+                'dalle_input': f'{adjective} {" ".join(words)}',
                 'strophe': strophe
             }
             output.append(content)
