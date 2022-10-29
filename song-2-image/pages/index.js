@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { useState } from "react";
 import Button from "../components/Button/Button";
+import Card from "../components/Card/Card";
 import InputField from "../components/InputField/InputField";
 
 import styles from "../styles/Home.module.css";
@@ -49,8 +50,11 @@ export default function Home() {
           Music to Image
         </h1>
         <div style={{display: "flex", direction: "row", marginTop: "40px", gap: "10px", height: "52px"}}>
-        <InputField placeholder="Pesquise uma música..."/>
-        <Button label="Pesquisar" handleClick={()=> console.log("Teste")} />
+          <InputField placeholder="Pesquise uma música..."/>
+          <Button label="Pesquisar" handleClick={()=> console.log("Teste")} />
+        </div>
+        <div>
+          <Card />
         </div>
         <p className={styles.description}>
           <input
