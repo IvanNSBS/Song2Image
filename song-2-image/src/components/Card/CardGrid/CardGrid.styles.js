@@ -8,4 +8,4 @@ flex-direction: row;
 max-width: 680px;
 align-items: center;
 margin: 10px auto 10px;
-`gi
+`

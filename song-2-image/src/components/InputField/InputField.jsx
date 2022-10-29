@@ -3,9 +3,10 @@ import { InputWrapper } from "./InputField.styles";
 
 const InputField = ({
   disabled = false,
-  placeholder = "InputField..."
+  placeholder = "InputField...",
+  onChange,
 }) => (
-  <InputWrapper disabled={disabled} placeholder={placeholder} />
+  <InputWrapper disabled={disabled} placeholder={placeholder} onChange={onChange} />
 );
 
 export default InputField;
