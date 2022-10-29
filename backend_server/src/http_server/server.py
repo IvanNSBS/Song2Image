@@ -1,4 +1,10 @@
+import glob
 import json
+import math
+import os
+import requests
+import tempfile
+import cv2
 from klein import Klein
 from words_analyzer.word_calculator import get_most_similar_words
 from words_analyzer.words_separator import lyrics_to_strophes
@@ -8,7 +14,8 @@ from song_requests.spotify_requester import (
     get_song_features, 
     search_for_songs_with_input,
     get_track_artist_and_name,
-    override_spotipy
+    override_spotipy,
+    get_track_duration
 )
 
 class MusicalBackendServer(object):
@@ -17,6 +24,8 @@ class MusicalBackendServer(object):
     """
 
     app = Klein()
+    SONG_VIDEO_FOLDER = './video'
+    SONG_VIDEO_NAME = 'song.mp4'
 
     def start(self, port: int):
         """
@@ -25,6 +34,12 @@ class MusicalBackendServer(object):
         :input port(int): The port that the server should be started
         """
         self.app.run("localhost", port)
+
+    @property
+    def song_video_path(self):
+        if not (os.path.exists(self.SONG_VIDEO_FOLDER)):
+            os.mkdir(self.SONG_VIDEO_FOLDER)
+        return os.path.join(self.SONG_VIDEO_FOLDER, self.SONG_VIDEO_NAME)
 
     def _response(self, request, code:int=200, msg=""):
         request.setResponseCode(code)
@@ -47,6 +62,55 @@ class MusicalBackendServer(object):
     def _get_song_snippet(self, song_title, artist=""):
         snippet = get_song_snippet(song_title, artist)
         return snippet
+
+    def __download_image(self, url: str, folder_path: str, file_name: str):
+        response = requests.get(url)
+        f = open(os.path.join(folder_path, file_name), 'wb')
+        f.write(response.content)
+        f.close()
+
+    def __generate_video_from_webp_images(self, images_folder_path: str, image_count:int, song_duration_ms:int):
+        fps = 24
+        frame_size = (1024, 1024)
+        target_files = os.path.join(images_folder_path, "*.webp")
+
+        fourcc = cv2.VideoWriter_fourcc('F','M','P','4')
+        out = cv2.VideoWriter(self.song_video_path, fourcc, fps, frame_size)
+
+        song_duration_seconds = song_duration_ms/1000
+        total_frames = song_duration_seconds * fps
+        image_duration_in_frames = math.ceil(total_frames / image_count)
+        for file in glob.glob(target_files):
+            img = cv2.imread(file)
+
+            for _ in range(image_duration_in_frames):
+                out.write(img)
+
+        out.release()
+        return self.song_video_path
+
+    @app.route('/dalle_images/', methods=['PUT'])
+    def receive_dalle_images(self, request):
+        content = json.loads(request.content.read())
+        track_id = content['track_id']
+        images_urls = content['images']
+        track_duration_ms = get_track_duration(track_id)
+
+        with tempfile.TemporaryDirectory() as download_folder:
+            i = 0
+            for url in images_urls:
+                self.__download_image(url, download_folder, f"{i}.webp")
+                i = i + 1
+
+            video_path = self.__generate_video_from_webp_images(
+                download_folder, len(images_urls), track_duration_ms
+            )
+
+        return self._response(request, 200, "Video created successfully")
+
+    @app.route('/get_last_video', methods=['GET'])
+    def get_last_video(self, request):
+        pass
 
     @app.route('/search_song/<string:search_query>', methods=['GET'])
     def search_song_with_spotify(self, request, search_query):
