@@ -56,3 +56,25 @@ export const StyledSelectionLable = styled.span`
   font-size: 22px;
   font-family: "Piazzolla";
 `
+
+export const GenerationColumnContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+
+  gap: 5px;
+
+  max-height: 200px;
+  mas-width: 100px;
+`
+
+export const GenerationRowContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  gap: 5px;
+
+  max-height: 200px;
+  mas-width: 100px;
+`

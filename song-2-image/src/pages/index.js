@@ -14,6 +14,8 @@ import {
   StyledMain,
   StyledTitle,
   StyledSelectionLable,
+  GenerationColumnContainer,
+  GenerationRowContainer,
 } from "./index.styles";
 
 const Home = () => {
@@ -123,37 +125,57 @@ const Home = () => {
         )}
         <PageContainer>
           <StyledTitle>Music to Image</StyledTitle>
-          {true ? (
-            <React.Fragment>
-              <SearchContainer>
-                <InputField
-                  placeholder="Pesquise uma música..."
-                  onChange={(e) => setMusicQuery(e.target.value)}
-                />
-                <Button
-                  disabled={musicQuery == ""}
-                  label="Pesquisar"
-                  handleClick={() => searchMusic()}
-                />
-              </SearchContainer>
-              <StyledSelectionLable>
-                Selecione a música desejada
-              </StyledSelectionLable>
-              <CardsContainer>
-                {musicResults.map((music, index) => {
-                  return (
-                    <Card
-                      key={music.song_name + music.artist}
-                      image={music.album_icon_preview_url}
-                      song={music.song_name}
-                      artist={music.artist}
-                      album={music.album}
-                      handleClick={() => setSelectedMusic(index)}
+          {spotifyToken ? (
+            (selectedMusic == -1) ? (
+              <React.Fragment>
+                <SearchContainer>
+                  <InputField
+                    placeholder="Pesquise uma música..."
+                    onChange={(e) => setMusicQuery(e.target.value)}
+                  />
+                  <Button
+                    disabled={musicQuery == ""}
+                    label="Pesquisar"
+                    handleClick={() => searchMusic()}
+                  />
+                </SearchContainer>
+                <StyledSelectionLable>
+                  Selecione a música desejada
+                </StyledSelectionLable>
+                <CardsContainer>
+                  {musicResults.map((music, index) => {
+                    return (
+                      <Card
+                        key={music.song_name + music.artist}
+                        image={music.album_icon_preview_url}
+                        song={music.song_name}
+                        artist={music.artist}
+                        album={music.album}
+                        handleClick={() => setSelectedMusic(index)}
+                      />
+                    );
+                  })}
+                </CardsContainer>
+              </React.Fragment>
+            ) : (              
+              <GenerationColumnContainer>
+                
+                <GenerationRowContainer>
+                  <Card />
+                  <GenerationColumnContainer>
+                    <Button
+                        disabled={musicQuery == ""}
+                        label="Gerar imagens"
+                        handleClick={() => searchMusic()}
                     />
-                  );
-                })}
-              </CardsContainer>
-            </React.Fragment>
+                  </GenerationColumnContainer>
+                </GenerationRowContainer>
+                <InputField
+                    placeholder="Descreva o ambiente..."
+                    onChange={(e) => setMusicQuery(e.target.value)}
+                />
+              </GenerationColumnContainer>
+            )
           ) : (
             <LoginContainer>
               <Button
