@@ -5,6 +5,7 @@ import Card from "../components/Card/Card";
 import InputField from "../components/InputField/InputField";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
+import { CardsContainer, SearchContainer } from "./index.styles";
 
 export default function Home() {
   const token = process.env.NEXT_PUBLIC_DALLE_TOKEN;
@@ -15,9 +16,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-
-
-  function searchMusic() {
+  const searchMusic = () => {
     if(musicQuery != "") {
       axios.get(`http://localhost:9000/search_song/${musicQuery}/6`)
       .then((res) => {
@@ -27,7 +26,7 @@ export default function Home() {
     }
   }
 
-  function getDalle2() {
+  const getDalle2 = () => {
     if(token != "" && query != "") {
       setError(false);
       setLoading(true);
@@ -63,49 +62,30 @@ export default function Home() {
         <h1 className={styles.title}>
           Music to Image
         </h1>
-        <div style={{display: "flex", direction: "row", marginTop: "40px", gap: "10px", height: "52px"}}>
-          <InputField 
-            placeholder="Pesquise uma música..."
-            onChange={(e) => setMusicQuery(e.target.value)}
-          />
-          <Button 
-            disabled={musicQuery == ""}
-            label="Pesquisar" 
-            handleClick={()=> searchMusic()} 
-          />
-        </div>
-        <div>
-          <Card />
-        </div>
-        <p className={styles.description}>
-          <input
-            id="query"
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Query"
-            style={{width: "500px"}}
-          />
-          <button onClick={getDalle2} disabled={query == ""}>Get 4 Images</button>
-        </p>
-        {error ? (
-          <div className={styles.error}>Something went wrong. Try again.</div>
-        ) : (
-          null
-        )}
-        {loading && <p>Loading...</p>}
-        <div className={styles.grid}>
-          {results.map((result) => {
+          <SearchContainer>
+            <InputField 
+              placeholder="Pesquise uma música..."
+              onChange={(e) => setMusicQuery(e.target.value)}
+            />
+            <Button 
+              disabled={musicQuery == ""}
+              label="Pesquisar" 
+              handleClick={()=> searchMusic()} 
+            />
+          </SearchContainer>
+        <CardsContainer>
+          {musicResults.map((music) => {
             return (
-              <div className={styles.card}>
-                <img
-                  className={styles.imgPreview}
-                  src={result.generation.image_path}
-                />
-              </div>
+              <Card
+                key={music.song_name + music.artist}
+                image={music.album_icon_preview_url}
+                song={music.song_name}
+                artist={music.artist}
+                album={music.album}
+              /> 
             );
           })}
-        </div>
+        </CardsContainer>
       </main>
     </div>
   )
