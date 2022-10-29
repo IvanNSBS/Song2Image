@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const InputWrapper = styled.input`
   display: flex;
-  width: 400px;
+  width: 506px;
   padding: 12px 16px;
   background: #FFFFFF;
   border: 3px solid #333333;

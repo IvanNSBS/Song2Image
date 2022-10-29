@@ -18,7 +18,6 @@ import {
   GenerationColumnContainer,
   GenerationRowContainer,
 } from "./index.styles";
-import Dropdown from "../components/Dropdown/Dropdown";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -167,7 +166,6 @@ const Home = () => {
               </React.Fragment>
             ) : (              
               <GenerationColumnContainer>
-                
                 <GenerationRowContainer>
                   <Card />
                   <GenerationColumnContainer>

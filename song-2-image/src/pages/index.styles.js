@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import InputField from "../components/InputField/InputField";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -55,7 +56,7 @@ export const StyledSelectionLable = styled.span`
   text-align: center;
   font-size: 22px;
   font-family: "Piazzolla";
-`
+`;
 
 export const GenerationColumnContainer = styled.div`
   display: flex;
@@ -65,8 +66,9 @@ export const GenerationColumnContainer = styled.div`
   gap: 5px;
 
   max-height: 200px;
-  mas-width: 100px;
-`
+
+  justify-content: space-evenly;
+`;
 
 export const GenerationRowContainer = styled.div`
   display: flex;
@@ -76,5 +78,4 @@ export const GenerationRowContainer = styled.div`
   gap: 5px;
 
   max-height: 200px;
-  mas-width: 100px;
-`
+`;
