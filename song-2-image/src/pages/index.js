@@ -18,6 +18,12 @@ import {
   GenerationColumnContainer,
   GenerationRowContainer,
 } from "./index.styles";
+import {
+  dropdownOptions,
+  postSpotifyToken,
+  redirectToSpotify,
+  searchMusic,
+} from "../Util/Index";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -30,6 +36,8 @@ const Home = () => {
   const [musicQuery, setMusicQuery] = useState("");
   const [musicResults, setMusicResults] = useState([]);
   const [selectedMusic, setSelectedMusic] = useState(-1);
+  const [artStyle, setArtStyle] = useState("");
+  const [ambience, setAmbience] = useState("");
   const [dalleQuery, setDalleQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -58,6 +66,18 @@ const Home = () => {
       postSpotifyToken(spotifyToken);
     }
   }, [spotifyToken]);
+
+  useEffect(() => {
+    if (selectedMusic != -1) {
+      axios
+        .post(
+          `http://localhost:9000/prepare_dalle/${musicResults[selectedMusic].track_id}`
+        )
+        .then((res) => {
+          console.log(res);
+        });
+    }
+  }, [selectedMusic]);
 
   const logout = () => {
     setSpotifyToken("");
@@ -90,18 +110,19 @@ const Home = () => {
     }
   };
 
-  const dropdownOptions = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
-
   const renderLogin = () => {
     return (
       <LoginContainer>
         <Button
           label="Login to spotify"
-          handleClick={() => redirectToSpotify(AUTH_ENDPOINT, CLIENT_ID, REDIRECT_URI, RESPONSE_TYPE)}
+          handleClick={() =>
+            redirectToSpotify(
+              AUTH_ENDPOINT,
+              CLIENT_ID,
+              REDIRECT_URI,
+              RESPONSE_TYPE
+            )
+          }
         />
       </LoginContainer>
     );
@@ -110,62 +131,64 @@ const Home = () => {
   const renderMusicSearch = () => {
     return (
       <React.Fragment>
-                <SearchContainer>
-                  <InputField
-                    placeholder="Pesquise uma música..."
-                    onChange={(e) => setMusicQuery(e.target.value)}
-                  />
-                  <Button
-                    disabled={musicQuery == ""}
-                    label="Pesquisar"
-                    handleClick={() => setMusicResults( searchMusic(musicQuery).data )}
-                  />
-                </SearchContainer>
-                {(musicResults.length > 0) &&
-                  <StyledSelectionLable>
-                    Selecione a música desejada
-                  </StyledSelectionLable>
-                }
-                <CardsContainer>
-                  {musicResults.map((music, index) => {
-                    return (
-                      <Card
-                        key={music.song_name + music.artist}
-                        image={music.album_icon_preview_url}
-                        song={music.song_name}
-                        artist={music.artist}
-                        album={music.album}
-                        handleClick={() => setSelectedMusic(index)}
-                      />
-                    );
-                  })}
-                </CardsContainer>
-              </React.Fragment>
+        <SearchContainer>
+          <InputField
+            placeholder="Pesquise uma música..."
+            onChange={(e) => setMusicQuery(e.target.value)}
+          />
+          <Button
+            disabled={!musicQuery}
+            label="Pesquisar"
+            handleClick={() => setMusicResults(searchMusic(musicQuery).data)}
+          />
+        </SearchContainer>
+        {musicResults.length > 0 && (
+          <StyledSelectionLable>
+            Selecione a música desejada
+          </StyledSelectionLable>
+        )}
+        <CardsContainer>
+          {musicResults.map((music, index) => {
+            return (
+              <Card
+                key={music.song_name + music.artist}
+                image={music.album_icon_preview_url}
+                song={music.song_name}
+                artist={music.artist}
+                album={music.album}
+                handleClick={() => setSelectedMusic(index)}
+              />
+            );
+          })}
+        </CardsContainer>
+      </React.Fragment>
     );
   };
 
   const renderGenerationSettings = () => {
     return (
       <GenerationColumnContainer>
-                <GenerationRowContainer>
-                  <Card />
-                  <GenerationColumnContainer>
-                    <Button
-                      disabled={musicQuery == ""}
-                      label="Gerar imagens"
-                      handleClick={() => searchMusic()}
-                    />
-                    <Select
-                      options={dropdownOptions}
-                      placeholder="Estilo de arte"
-                    />
-                  </GenerationColumnContainer>
-                </GenerationRowContainer>
-                <InputField
-                  placeholder="Descreva o ambiente..."
-                  onChange={(e) => setMusicQuery(e.target.value)}
-                />
-              </GenerationColumnContainer>
+        <GenerationRowContainer>
+          <Card
+            image={musicResults[selectedMusic].album_icon_preview_url}
+            song={musicResults[selectedMusic].song_name}
+            artist={musicResults[selectedMusic].artist}
+            album={musicResults[selectedMusic].album}
+          />
+          <GenerationColumnContainer>
+            <Button disabled={!artStyle} label="Gerar imagens" />
+            <Select
+              options={dropdownOptions}
+              placeholder="Estilo de arte"
+              onChange={(e) => setArtStyle(e.value)}
+            />
+          </GenerationColumnContainer>
+        </GenerationRowContainer>
+        <InputField
+          placeholder="Descreva o ambiente..."
+          onChange={(e) => setAmbience(e.target.value)}
+        />
+      </GenerationColumnContainer>
     );
   };
 
@@ -182,15 +205,11 @@ const Home = () => {
         )}
         <PageContainer>
           <StyledTitle>Music to Image</StyledTitle>
-          {spotifyToken ? (
-            (selectedMusic == -1) ? (
-              renderMusicSearch()
-            ) : (
-              renderGenerationSettings()
-            )
-          ) : (
-            renderLogin()
-          )}
+          {spotifyToken
+            ? selectedMusic == -1
+              ? renderMusicSearch()
+              : renderGenerationSettings()
+            : renderLogin()}
         </PageContainer>
       </StyledMain>
     </div>

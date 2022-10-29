@@ -4,6 +4,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+VALENCE_ADJECTIVES = ['depressive', 'sad', 'neutral', 'energetic', 'euphoric']
+
 
 client_credentials_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
@@ -34,6 +36,21 @@ def get_track_duration(track_id: str):
     track_info = sp.track(track_id)
     return track_info['duration_ms']
 
+def get_adjective_from_valence(track_id: str):
+    valence = get_song_features(track_id)[0]['valence']
+    count = len(VALENCE_ADJECTIVES)
+    step = 1/count
+
+    for i in range(0, count):
+        a = i * step
+        b = (i+1) * step
+
+        print(f"current range at <{i}>: ({a}, {b})")
+        if valence >= a and valence <= b:
+            return VALENCE_ADJECTIVES[i]
+
+    return None
+
 def search_for_songs_with_input(query: str, max_outputs=2):
     search_query = query # string to search
     limit_results = clamp(max_outputs, 1, 50) # limit of results to be returned, min = 1, none = 10, max = 50
@@ -57,3 +74,5 @@ def search_for_songs_with_input(query: str, max_outputs=2):
         output.append(content)
 
     return output
+
+print(get_adjective_from_valence("5FZxsHWIvUsmSK1IAvm2pp"))
