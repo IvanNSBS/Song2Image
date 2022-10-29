@@ -9,6 +9,10 @@ export const StyledButton = styled.button`
   align-items: center;
   background-color: #333333;
   padding: 10px 24px;
+
+  &:hover{
+    background-color: black;
+  }
 `;
 
 export const StyledText = styled.span`
