@@ -10,7 +10,7 @@ def _valid_word(word: str):
         return False
 
 def _remove_invalid_characters_from_word(word: str):
-    return word.replace("?", "").replace("\n", "")
+    return word.replace("?", "").replace("\n", " ")
 
 def _remove_words_that_arent_on_wordnet(words: List[str]):
     valid_words = [ word for word in words if _valid_word(word) ]
