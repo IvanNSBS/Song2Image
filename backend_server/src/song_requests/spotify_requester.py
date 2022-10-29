@@ -8,6 +8,9 @@ CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 client_credentials_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
 sp = spotipy.Spotify(client_credentials_manager = client_credentials_manager)
 
+def override_spotipy(token:str):
+    global sp
+    sp = spotipy.Spotify(auth=token)
 
 def clamp(value:int, min_val: int, max_val:int):
     if value < min_val:

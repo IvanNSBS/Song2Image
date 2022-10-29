@@ -7,7 +7,8 @@ from song_requests.musixmatch_requester import get_song_snippet
 from song_requests.spotify_requester import ( 
     get_song_features, 
     search_for_songs_with_input,
-    get_track_artist_and_name
+    get_track_artist_and_name,
+    override_spotipy
 )
 
 class MusicalBackendServer(object):
@@ -81,3 +82,10 @@ class MusicalBackendServer(object):
         msg['snippet'] = snippet
         msg['dalle_data'] = output
         return self._response(request, 200, json.dumps(msg, indent=4))
+
+    @app.route('/spotify_token/<string:spotify_token>', methods=['POST'])
+    def set_spotifyToken(self, request, spotify_token):
+        override_spotipy(spotify_token)
+        return self._response(request, 200, "overriding sucessfully")
+
+

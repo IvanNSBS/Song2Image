@@ -37,8 +37,14 @@ export default function Home() {
     }
 
     setSpotifyToken(token)
-
   }, [])
+
+  useEffect(() => {
+    if(spotifyToken){
+      postSpotifyToken()
+    }
+  },[spotifyToken])
+
 
    const logout = () => {
     setSpotifyToken("")
@@ -57,6 +63,13 @@ export default function Home() {
         console.log(musicResults);
       });
     }
+  }
+
+  const postSpotifyToken = () => {
+      axios.post(`http://localhost:9000/spotify_token/${spotifyToken}`)
+      .then((res) => {
+        console.log(res);
+      });
   }
 
   const getDalle2 = () => {
@@ -84,6 +97,8 @@ export default function Home() {
       setError(true);
     }
   }
+
+  console.log(spotifyToken) //DELETE LATER
 
   return (
     <div className={styles.container}>
