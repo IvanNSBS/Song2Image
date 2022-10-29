@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useState } from "react";
+import Button from "../components/Button/Button";
 
 import styles from "../styles/Home.module.css";
 
@@ -46,6 +47,7 @@ export default function Home() {
         <h1 className={styles.title}>
           Music to Image
         </h1>
+        <Button label="Pesquisar" handleClick={()=> console.log("Teste")} />
         <p className={styles.description}>
           <input
             id="query"

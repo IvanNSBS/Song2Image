@@ -14,28 +14,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-input {
-  font-size: 16px;
-  padding: 10px;
-  margin: 10px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 10px;
-  border-radius: 3px;
-}
-
-button{
-  font-size: 16px;
-  padding: 10px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 10px;
-  border-radius: 6px;
-}
-
-button:hover {
-  background-color: cadetblue;
-  cursor: pointer;
-  color: white;
-}
