@@ -119,6 +119,17 @@ const Home = () => {
     { value: "vanilla", label: "Vanilla" },
   ];
 
+  const renderLogin = () => {
+    return (
+      <LoginContainer>
+        <Button
+          label="Login to spotify"
+          handleClick={() => redirectToSpotify()}
+        />
+      </LoginContainer>
+    );
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -133,7 +144,7 @@ const Home = () => {
         <PageContainer>
           <StyledTitle>Music to Image</StyledTitle>
           {spotifyToken ? (
-            (selectedMusic == -1) ? (
+            selectedMusic == -1 ? (
               <React.Fragment>
                 <SearchContainer>
                   <InputField
@@ -164,32 +175,30 @@ const Home = () => {
                   })}
                 </CardsContainer>
               </React.Fragment>
-            ) : (              
+            ) : (
               <GenerationColumnContainer>
                 <GenerationRowContainer>
                   <Card />
                   <GenerationColumnContainer>
                     <Button
-                        disabled={musicQuery == ""}
-                        label="Gerar imagens"
-                        handleClick={() => searchMusic()}
+                      disabled={musicQuery == ""}
+                      label="Gerar imagens"
+                      handleClick={() => searchMusic()}
                     />
-                    <Select options={dropdownOptions} placeholder="Estilo de arte"/>
+                    <Select
+                      options={dropdownOptions}
+                      placeholder="Estilo de arte"
+                    />
                   </GenerationColumnContainer>
                 </GenerationRowContainer>
                 <InputField
-                    placeholder="Descreva o ambiente..."
-                    onChange={(e) => setMusicQuery(e.target.value)}
+                  placeholder="Descreva o ambiente..."
+                  onChange={(e) => setMusicQuery(e.target.value)}
                 />
               </GenerationColumnContainer>
             )
           ) : (
-            <LoginContainer>
-              <Button
-                label="Login to spotify"
-                handleClick={() => redirectToSpotify()}
-              />
-            </LoginContainer>
+            renderLoginUI()
           )}
         </PageContainer>
       </StyledMain>
