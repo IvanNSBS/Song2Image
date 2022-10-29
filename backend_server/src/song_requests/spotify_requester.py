@@ -30,6 +30,10 @@ def get_track_artist_and_name(track_id: str):
     artist = track_info['artists'][0]['name']
     return name, artist
 
+def get_track_duration(track_id: str):
+    track_info = sp.track(track_id)
+    return track_info['duration_ms']
+
 def search_for_songs_with_input(query: str, max_outputs=2):
     search_query = query # string to search
     limit_results = clamp(max_outputs, 1, 50) # limit of results to be returned, min = 1, none = 10, max = 50

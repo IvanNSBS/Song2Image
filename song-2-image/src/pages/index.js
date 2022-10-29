@@ -14,6 +14,7 @@ import {
   SearchContainer,
   StyledMain,
   StyledTitle,
+  StyledSelectionLable,
 } from "./index.styles";
 import Dropdown from "../components/Dropdown/Dropdown";
 
@@ -144,6 +145,9 @@ const Home = () => {
                   handleClick={() => searchMusic()}
                 />
               </SearchContainer>
+              <StyledSelectionLable>
+                Selecione a música desejada
+              </StyledSelectionLable>
               <CardsContainer>
                 {musicResults.map((music, index) => {
                   return (
