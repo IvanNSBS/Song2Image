@@ -27,6 +27,7 @@ class MusicalBackendServer(object):
 
     def _response(self, request, code:int=200, msg=""):
         request.setResponseCode(code)
+        request.setHeader("Access-Control-Allow-Origin", "*")
         return msg
 
     def _get_song_lyrics(self, title, artist=""):
