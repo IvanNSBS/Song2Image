@@ -3,10 +3,11 @@ import Image from "next/image";
 
 export const StyledCard = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-basis: 30%;
   align-items: center;
   width: 335px;
   padding: 10px;
+  margin: 5px auto;
   background: #FFFFFF;
   border: 3px solid #333333;
   border-radius: 8px;
