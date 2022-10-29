@@ -33,7 +33,7 @@ export const CardsContainer = styled.div`
   gap: 20px;
   max-width: 700px;
   align-items: center;
-  margin: 100px auto 10px;
+  margin: 20px auto 10px;
 `;
 
 export const SearchContainer = styled.div`
@@ -49,3 +49,10 @@ export const LoginContainer = styled.div`
   height: 52px;
   margin-top: 40px;
 `;
+
+export const StyledSelectionLable = styled.span`
+  margin-top: 50px;
+  text-align: center;
+  font-size: 22px;
+  font-family: "Piazzolla";
+`
