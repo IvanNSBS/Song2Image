@@ -44,7 +44,7 @@ export const ResultsContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   gap: 32px;
-
+  margin-top: 32px;
   align-items: center;
 `;
 
@@ -52,6 +52,6 @@ export const StropheContainer = styled.p`
   font-weight: 400;
   font-size: 25px;
   line-height: 30px;
-
+  white-space: pre-wrap;
   width: 500px;
 `;

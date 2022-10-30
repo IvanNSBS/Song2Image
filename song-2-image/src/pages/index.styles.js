@@ -62,12 +62,9 @@ export const GenerationColumnContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-
-  gap: 5px;
-
-  max-height: 200px;
-
   justify-content: space-evenly;
+  align-items: center;
+  gap: 5px;
 `;
 
 export const GenerationRowContainer = styled.div`

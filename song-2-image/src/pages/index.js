@@ -24,6 +24,7 @@ import {
   redirectToSpotify,
   searchMusic,
 } from "../utils";
+import DalleResultsRenderer from "../components/DalleResultsRenderer/DalleResultsRenderer";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -38,6 +39,8 @@ const Home = () => {
   const [selectedMusic, setSelectedMusic] = useState(-1);
   const [artStyle, setArtStyle] = useState("");
   const [ambience, setAmbience] = useState("");
+  const [prepareDalleRes, setPrepareDalleRes] = useState([]);
+  const [currentDalleIndex, setDalleIndex] = useState(0);
   const [dalleQuery, setDalleQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -74,17 +77,54 @@ const Home = () => {
           `http://localhost:9000/prepare_dalle/${musicResults[selectedMusic].track_id}`
         )
         .then((res) => {
-          console.log(res);
+          setPrepareDalleRes(res.data.dalle_data);
         });
     }
-  }, [selectedMusic]);
+  }, [selectedMusic, artStyle, ambience]);
+
+  useEffect(() => {
+    if (prepareDalleRes.length > 0) {
+      setDalleQuery(
+        `${artStyle} ${prepareDalleRes[0].dalle_input} ${ambience}`
+      );
+    }
+  }, [prepareDalleRes, artStyle, ambience]);
+
+  const handleDalleGenarations = () => {
+    setLoading(true);
+    if (currentDalleIndex < prepareDalleRes.length) {
+      const duplicateEntry = results.find(
+        (e) => e.dalleInput === prepareDalleRes[currentDalleIndex].dalle_input
+      );
+
+      if (!duplicateEntry) {
+        getDalle2(prepareDalleRes[currentDalleIndex].strophe);
+      } else {
+        const newEntry = {
+          dalleResult: duplicateEntry.result,
+          dalleInput: duplicateEntry.dalleInput,
+          strophe: duplicateEntry.strophe,
+        };
+        setResults((oldArray) => [...oldArray, newEntry]);
+      }
+
+      setDalleIndex(currentDalleIndex + 1);
+      setDalleQuery(
+        `${artStyle} ${prepareDalleRes[currentDalleIndex].dalle_input} ${ambience}`
+      );
+    }
+  };
+
+  console.log(prepareDalleRes);
+  console.log(dalleQuery);
+  console.log(results);
 
   const logout = () => {
     setSpotifyToken("");
     window.localStorage.removeItem("token");
   };
 
-  const getDalle2 = () => {
+  const getDalle2 = (strophe) => {
     if (dalleToken != "" && dalleQuery != "") {
       setError(false);
       setLoading(true);
@@ -97,7 +137,12 @@ const Home = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setResults(data.result);
+          const newEntry = {
+            dalleResult: data.result,
+            dalleInput: dalleQuery,
+            strophe: strophe,
+          };
+          setResults((oldArray) => [...oldArray, newEntry]);
           setLoading(false);
         })
         .catch((err) => {
@@ -178,18 +223,31 @@ const Home = () => {
             album={musicResults[selectedMusic].album}
           />
           <GenerationColumnContainer>
-            <Button disabled={!artStyle} label="Gerar imagens" />
+            <Button
+              disabled={!artStyle || !dalleQuery || loading}
+              label="Gerar imagens"
+              onClick={handleDalleGenarations()}
+            />
             <Select
               options={dropdownOptions}
               placeholder="Estilo de arte"
               onChange={(e) => setArtStyle(e.value)}
+              isDisabled={loading}
             />
           </GenerationColumnContainer>
         </GenerationRowContainer>
         <InputField
           placeholder="Descreva o ambiente..."
           onChange={(e) => setAmbience(e.target.value)}
+          disabled={loading}
         />
+        {results.map((data) => (
+          <DalleResultsRenderer
+            isLoading={data.dalleResult.length < 1}
+            dalleResults={data.dalleResult}
+            strophe={data.strophe}
+          />
+        ))}
       </GenerationColumnContainer>
     );
   };
