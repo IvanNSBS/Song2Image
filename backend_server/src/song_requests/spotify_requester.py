@@ -45,7 +45,6 @@ def get_adjective_from_valence(track_id: str):
         a = i * step
         b = (i+1) * step
 
-        print(f"current range at <{i}>: ({a}, {b})")
         if valence >= a and valence <= b:
             return VALENCE_ADJECTIVES[i]
 
