@@ -10,7 +10,7 @@ def _valid_word(word: str):
         return False
 
 def _remove_invalid_characters_from_word(word: str):
-    return word.replace("?", "").replace("\n", " ")
+    return word.replace("?", "").replace("\n", " ").replace("\r", " ")
 
 def _remove_words_that_arent_on_wordnet(words: List[str]):
     valid_words = [ word for word in words if _valid_word(word) ]
@@ -34,7 +34,8 @@ def lyrics_to_strophes(lyrics: str) -> List[str]:
     """
     Separates a song lyrics to strophes 
     """
-    output = lyrics.split("""\n\n""")
+
+    output = lyrics.replace("""\r""", """\n""").split("""\n\n""")
     return output
 
 def verse_to_word_array(verse: str) -> List[str]:

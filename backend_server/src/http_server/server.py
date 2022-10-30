@@ -134,7 +134,7 @@ class MusicalBackendServer(object):
         snippet = self._get_song_snippet(song_name, artist)
         lyrics = self._get_song_lyrics(song_name, artist)
         strophes = lyrics_to_strophes(lyrics)
-        
+        print(lyrics)
         output = []
         for strophe in strophes:
             words = self._get_dalle_input_for_strophe(snippet, strophe)
