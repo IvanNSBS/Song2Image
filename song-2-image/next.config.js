@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["place.dog", "i.scdn.co"],
+    domains: ["place.dog", "i.scdn.co", "openailabsprodscus.blob.core.windows.net"],
   },
   compiler: {
     styledComponents: true,
