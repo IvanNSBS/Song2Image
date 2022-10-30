@@ -1,11 +1,33 @@
-import Image from "next/image";
-import React, { Fragment } from "react";
+import React from "react";
 import {
   ImagesContainer,
   ResultsContainer,
   StropheContainer,
   StyledImage,
 } from "./DalleResultsRenderer.styles";
+import ContentLoader from "react-content-loader";
+
+const SkeletonLoader = () => (
+  <ContentLoader
+    speed={2}
+    backgroundColor="#F3F3F3"
+    foregroundColor="#ECEBEB"
+    width={1200}
+    height={320}
+    viewBox="0 0 1200 320"
+  >
+    <rect height={180} width={180} x={0} y={0} rx={3} ry={3} />
+    <rect height={180} width={180} x={192} y={0} rx={3} ry={3} />
+    <rect height={180} width={180} x={384} y={0} rx={3} ry={3} />
+    <rect height={180} width={180} x={576} y={0} rx={3} ry={3} />
+
+    <rect height={20} width={360} x={780} y={0} rx={3} ry={3} />
+    <rect height={20} width={340} x={780} y={40} rx={3} ry={3} />
+    <rect height={20} width={280} x={780} y={80} rx={3} ry={3} />
+    <rect height={20} width={360} x={780} y={120} rx={3} ry={3} />
+    <rect height={20} width={310} x={780} y={160} rx={3} ry={3} />
+  </ContentLoader>
+);
 
 const DalleResultsRenderer = ({
   isLoading = true,
@@ -15,7 +37,7 @@ const DalleResultsRenderer = ({
   return (
     <>
       {isLoading ? (
-        <span>loading...</span>
+        <SkeletonLoader />
       ) : (
         <ResultsContainer>
           <ImagesContainer>
