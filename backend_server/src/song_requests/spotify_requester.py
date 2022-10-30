@@ -73,5 +73,3 @@ def search_for_songs_with_input(query: str, max_outputs=2):
         output.append(content)
 
     return output
-
-print(get_adjective_from_valence("5FZxsHWIvUsmSK1IAvm2pp"))

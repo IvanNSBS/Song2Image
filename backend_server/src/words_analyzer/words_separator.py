@@ -35,7 +35,7 @@ def lyrics_to_strophes(lyrics: str) -> List[str]:
     Separates a song lyrics to strophes 
     """
 
-    output = lyrics.replace("""\r""", """\n""").split("""\n\n""")
+    output = lyrics.replace("""\n\r\n""", """\n\n""").split("""\n\n""")
     return output
 
 def verse_to_word_array(verse: str) -> List[str]:
