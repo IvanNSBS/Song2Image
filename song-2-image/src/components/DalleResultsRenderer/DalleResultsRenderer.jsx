@@ -7,7 +7,7 @@ import {
 } from "./DalleResultsRenderer.styles";
 import ContentLoader from "react-content-loader";
 
-const SkeletonLoader = () => (
+export const SkeletonLoader = () => (
   <ContentLoader
     speed={2}
     backgroundColor="#F3F3F3"
@@ -30,7 +30,6 @@ const SkeletonLoader = () => (
 );
 
 const DalleResultsRenderer = ({
-  isLoading = false,
   dalleResults = mockedData,
   strophe = mockedStrophe,
 }) => {
@@ -45,30 +44,24 @@ const DalleResultsRenderer = ({
   };
 
   return (
-    <>
-      {isLoading ? (
-        <SkeletonLoader />
-      ) : (
-        <ResultsContainer>
-          <ImagesContainer>
-            {dalleResults.map((result, index) => {
-              return (
-                <StyledImage
-                  src={result.generation.image_path}
-                  key={result.id}
-                  width={180}
-                  height={180}
-                  index={index}
-                  selectedImage={selectedImage}
-                  onClick={() => handleClick(index)}
-                />
-              );
-            })}
-          </ImagesContainer>
-          <StropheContainer>{strophe}</StropheContainer>
-        </ResultsContainer>
-      )}
-    </>
+    <ResultsContainer>
+        <ImagesContainer>
+          {dalleResults.map((result, index) => {
+            return (
+              <StyledImage
+                src={result.generation.image_path}
+                key={result.id}
+                width={180}
+                height={180}
+                index={index}
+                selectedImage={selectedImage}
+                onClick={() => handleClick(index)}
+              />
+            );
+          })}
+        </ImagesContainer>
+        <StropheContainer>{strophe}</StropheContainer>
+      </ResultsContainer>
   );
 };
 

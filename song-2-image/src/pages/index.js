@@ -24,7 +24,7 @@ import {
   redirectToSpotify,
   searchMusic,
 } from "../utils";
-import DalleResultsRenderer from "../components/DalleResultsRenderer/DalleResultsRenderer";
+import DalleResultsRenderer, { SkeletonLoader } from "../components/DalleResultsRenderer/DalleResultsRenderer";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -40,7 +40,6 @@ const Home = () => {
   const [artStyle, setArtStyle] = useState("");
   const [ambience, setAmbience] = useState("");
   const [prepareDalleRes, setPrepareDalleRes] = useState([]);
-  const [currentDalleIndex, setDalleIndex] = useState(0);
   const [dalleQuery, setDalleQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -77,6 +76,7 @@ const Home = () => {
           `http://localhost:9000/prepare_dalle/${musicResults[selectedMusic].track_id}`
         )
         .then((res) => {
+          console.log(res.data);
           setPrepareDalleRes(res.data.dalle_data);
         });
     }
@@ -90,34 +90,36 @@ const Home = () => {
     }
   }, [prepareDalleRes, artStyle, ambience]);
 
-  const handleDalleGenarations = () => {
+  const handleDalleGenarations = (index) => {
     setLoading(true);
-    if (currentDalleIndex < prepareDalleRes.length) {
-      const duplicateEntry = results.find(
-        (e) => e.dalleInput === prepareDalleRes[currentDalleIndex].dalle_input
-      );
+    console.log("1289o73y12879eyqa wodk lasz")
 
-      if (!duplicateEntry) {
-        getDalle2(prepareDalleRes[currentDalleIndex].strophe);
-      } else {
-        const newEntry = {
-          dalleResult: duplicateEntry.result,
-          dalleInput: duplicateEntry.dalleInput,
-          strophe: duplicateEntry.strophe,
-        };
-        setResults((oldArray) => [...oldArray, newEntry]);
-      }
-
-      setDalleIndex(currentDalleIndex + 1);
-      setDalleQuery(
-        `${artStyle} ${prepareDalleRes[currentDalleIndex].dalle_input} ${ambience}`
-      );
+    if (index >= prepareDalleRes.length) {
+      setLoading(false);
+      return;
     }
-  };
+    
+    setDalleQuery(
+      `${artStyle} ${prepareDalleRes[index].dalle_input} ${ambience}`
+    );
 
-  console.log(prepareDalleRes);
-  console.log(dalleQuery);
-  console.log(results);
+    const duplicateEntry = results.find(
+      (e) => e.dalleInput === prepareDalleRes[index].dalle_input
+    );
+
+    if (!duplicateEntry) {
+      getDalle2(prepareDalleRes[index].strophe);
+    } else {
+      const newEntry = {
+        dalleResult: duplicateEntry.result,
+        dalleInput: duplicateEntry.dalleInput,
+        strophe: duplicateEntry.strophe,
+      };
+      setResults((oldArray) => [...oldArray, newEntry]);
+    }
+
+    handleDalleGenarations(index + 1);
+  };
 
   const logout = () => {
     setSpotifyToken("");
@@ -127,7 +129,6 @@ const Home = () => {
   const getDalle2 = (strophe) => {
     if (dalleToken != "" && dalleQuery != "") {
       setError(false);
-      setLoading(true);
 
       fetch(`/api/dalle2?k=${dalleToken}&q=${dalleQuery}`, {
         method: "POST",
@@ -143,11 +144,9 @@ const Home = () => {
             strophe: strophe,
           };
           setResults((oldArray) => [...oldArray, newEntry]);
-          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
-          setLoading(false);
           setError(true);
         });
     } else {
@@ -226,7 +225,7 @@ const Home = () => {
             <Button
               disabled={!artStyle || !dalleQuery || loading}
               label="Gerar imagens"
-              onClick={handleDalleGenarations()}
+              handleClick={() => handleDalleGenarations(0)}
             />
             <Select
               options={dropdownOptions}
@@ -241,13 +240,16 @@ const Home = () => {
           onChange={(e) => setAmbience(e.target.value)}
           disabled={loading}
         />
-        {results.map((data) => (
+        {
+          !loading ?
+          (results.map((data) => (
           <DalleResultsRenderer
-            isLoading={data.dalleResult.length < 1}
             dalleResults={data.dalleResult}
             strophe={data.strophe}
           />
-        ))}
+        ))) :
+          (prepareDalleRes.map(() => <SkeletonLoader/>))
+        }
       </GenerationColumnContainer>
     );
   };
