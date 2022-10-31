@@ -4,7 +4,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-VALENCE_ADJECTIVES = ['depressive', 'sad', 'neutral', 'energetic', 'euphoric']
+VALENCE_ADJECTIVES = ['depressive', 'sad','angry','upset','peaceful','cheerful','joyful','happy', 'euphoric']
 
 
 client_credentials_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)

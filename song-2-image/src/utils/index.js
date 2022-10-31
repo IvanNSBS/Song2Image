@@ -24,9 +24,14 @@ export const postSpotifyToken = async (spotifyToken) => {
 
 export const dropdownOptions = [
   { value: "digital art of", label: "Digital Art" },
-  { value: "gothic painting of", label: "Gothic" },
-  { value: "horror painting of", label: "Horror" },
-  { value: "medieval painting of", label: "Medieval" },
-  { value: "oil painting of", label: "Oil Painting" },
-  { value: "renaissance painting of", label: "Renaissance" },
+  { value: "abstract art of", label: "Abstract" },
+  { value: "oil art of", label: "Oil Painting" },
+  { value: "gothic art of", label: "Gothic" },
+  { value: "renaissance art of", label: "Renaissance" },
+  { value: "futuristic art of", label: "Futuristic" },
+  { value: "realistic art of", label: "Realism" },
+  { value: "psychedelic art of", label: "Psychedelic" },
+  { value: "surrealistic art of", label: "Surrealism" }
 ];
+
+export const sortedDropdownOptions = dropdownOptions.sort((a,b)=> a.label.localeCompare(b.label));

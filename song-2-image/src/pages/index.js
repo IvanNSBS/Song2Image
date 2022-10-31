@@ -19,14 +19,17 @@ import {
   GenerationRowContainer,
 } from "./index.styles";
 import {
+  sortedDropdownOptions,
   dropdownOptions,
   postSpotifyToken,
   redirectToSpotify,
   searchMusic,
 } from "../utils";
 import DalleResultsRenderer, {
+  mockedData,
   SkeletonLoader,
 } from "../components/DalleResultsRenderer/DalleResultsRenderer";
+import { StyledImage } from "../components/DalleResultsRenderer/DalleResultsRenderer.styles";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -47,6 +50,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(-1);
   const [error, setError] = useState(false);
+  const [imageLinks,setImageLinks] = useState([]);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -79,7 +83,6 @@ const Home = () => {
           `http://localhost:9000/prepare_dalle/${musicResults[selectedMusic].track_id}`
         )
         .then((res) => {
-          console.log(res.data);
           setPrepareDalleRes(res.data.dalle_data);
         });
     }
@@ -96,7 +99,6 @@ const Home = () => {
   const handleDalleGenarations = (index) => {
     if (index == 0) setCount(prepareDalleRes.length);
     setLoading(true);
-    console.log("1289o73y12879eyqa wodk lasz");
 
     if (index >= prepareDalleRes.length) {
       return;
@@ -158,8 +160,6 @@ const Home = () => {
       setError(true);
     }
   };
-
-  console.log(count);
 
   useEffect(() => {
     if (count <= 0) {
@@ -236,12 +236,12 @@ const Home = () => {
           />
           <GenerationColumnContainer>
             <Button
-              disabled={!artStyle || !dalleQuery || loading}
+              disabled={!artStyle || !dalleQuery || loading || !ambience}
               label="Gerar imagens"
               handleClick={() => handleDalleGenarations(0)}
             />
             <Select
-              options={dropdownOptions}
+              options={sortedDropdownOptions}
               placeholder="Estilo de arte"
               onChange={(e) => setArtStyle(e.value)}
               isDisabled={loading}
@@ -254,17 +254,20 @@ const Home = () => {
           disabled={loading}
         />
         {!loading
-          ? results.map((data) => (
+          ? results.map((data,index) => (
               <DalleResultsRenderer
                 dalleResults={data.dalleResult}
                 strophe={data.strophe}
+                selectedImageLink={imageLinks}
+                setSelectedImageLink={setImageLinks}
+                selectedIndex={index}
               />
             ))
-          : prepareDalleRes.map(<SkeletonLoader />)}
+          : prepareDalleRes.map(() => (<SkeletonLoader />))}
       </GenerationColumnContainer>
     );
   };
-
+  
   return (
     <div className={styles.container}>
       <Head>

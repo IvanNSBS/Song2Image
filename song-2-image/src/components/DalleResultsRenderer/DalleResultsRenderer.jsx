@@ -32,14 +32,23 @@ export const SkeletonLoader = () => (
 const DalleResultsRenderer = ({
   dalleResults = mockedData,
   strophe = mockedStrophe,
+  selectedIndex,
+  selectedImageLink,
+  setSelectedImageLink
 }) => {
   const [selectedImage, setSelectedImage] = useState(-1);
 
   const handleClick = (index) => {
     if (index == selectedImage) {
       setSelectedImage(-1);
-    } else {
+      var arrayClone = [...selectedImageLink];
+      arrayClone.splice(selectedIndex,1);
+      setSelectedImageLink(arrayClone);
+    }else {
       setSelectedImage(index);
+      var arrayClone = [...selectedImageLink];
+      arrayClone.splice(selectedIndex,0,dalleResults[index].generation.image_path);
+      setSelectedImageLink(arrayClone);
     }
   };
 
@@ -67,7 +76,7 @@ const DalleResultsRenderer = ({
 
 export default DalleResultsRenderer;
 
-const mockedData = [
+export const mockedData = [
   {
     id: "generation-90HVzHcQ7u9akdoS83Z9xVaQ",
     object: "generation",
@@ -75,7 +84,7 @@ const mockedData = [
     generation_type: "ImageGeneration",
     generation: {
       image_path:
-        "https://openailabsprodscus.blob.core.windows.net/private/user-3WDSburElMKHvQlefMA7xz6u/generations/generation-RsRMw20XYEhPqwxtWr8wnsHq/image.webp?st=2022-10-30T17%3A52%3A39Z&se=2022-10-30T19%3A50%3A39Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-30T18%3A49%3A27Z&ske=2022-11-06T18%3A49%3A27Z&sks=b&skv=2021-08-06&sig=NIlKhIvRVDbw1dc8oHynlDeQxuzX9cM4q1NkO%2BOIgn0%3D",
+      "https://openailabsprodscus.blob.core.windows.net/private/user-MLlIlQ6dug6zJcjPgf6LgSRp/generations/generation-3W9GpNk8KqgeGtmYHcjItpkh/image.webp?st=2022-10-31T21%3A27%3A28Z&se=2022-10-31T23%3A25%3A28Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-31T18%3A59%3A28Z&ske=2022-11-07T18%3A59%3A28Z&sks=b&skv=2021-08-06&sig=IOK3NVt3yrmzLRC587J3EIM2ydH/q1gv00hL3dRVmaY%3D"
     },
     task_id: "task-5NnGRQwjePyZUzEEE0OsL8iD",
     prompt_id: "prompt-xsmVMCmyzOUWUTiOxPzVMKoG",
@@ -88,7 +97,7 @@ const mockedData = [
     generation_type: "ImageGeneration",
     generation: {
       image_path:
-        "https://openailabsprodscus.blob.core.windows.net/private/user-3WDSburElMKHvQlefMA7xz6u/generations/generation-EWC5sjT0owkAZp7KGN3FlMiX/image.webp?st=2022-10-30T17%3A52%3A39Z&se=2022-10-30T19%3A50%3A39Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-30T18%3A49%3A27Z&ske=2022-11-06T18%3A49%3A27Z&sks=b&skv=2021-08-06&sig=JxLm9AZzBUQEU%2BBHJd2Mfg5CBuwJmbSPJqKZjSDNTSo%3D",
+      "https://openailabsprodscus.blob.core.windows.net/private/user-MLlIlQ6dug6zJcjPgf6LgSRp/generations/generation-PLNGfhroXsuNFt3bNdn2Rl4J/image.webp?st=2022-10-31T21%3A27%3A28Z&se=2022-10-31T23%3A25%3A28Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-31T18%3A59%3A28Z&ske=2022-11-07T18%3A59%3A28Z&sks=b&skv=2021-08-06&sig=n1YSMeeGF9VkDc6R1BdfnDcLXmKh4WfHR2vaj3eQvFg%3D"
     },
     task_id: "task-5NnGRQwjePyZUzEEE0OsL8iD",
     prompt_id: "prompt-xsmVMCmyzOUWUTiOxPzVMKoG",
@@ -101,7 +110,7 @@ const mockedData = [
     generation_type: "ImageGeneration",
     generation: {
       image_path:
-        "https://openailabsprodscus.blob.core.windows.net/private/user-3WDSburElMKHvQlefMA7xz6u/generations/generation-9TCqzNB4mgl1GUGOopDow5eh/image.webp?st=2022-10-30T17%3A52%3A39Z&se=2022-10-30T19%3A50%3A39Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-30T18%3A49%3A27Z&ske=2022-11-06T18%3A49%3A27Z&sks=b&skv=2021-08-06&sig=zpvzM88203y9mtm0J54vO8g50K/IE5PHHTQo%2BYZ5jug%3D",
+        "https://openailabsprodscus.blob.core.windows.net/private/user-MLlIlQ6dug6zJcjPgf6LgSRp/generations/generation-dTyaCYX3jI3mUWCiiAerCEof/image.webp?st=2022-10-31T21%3A27%3A28Z&se=2022-10-31T23%3A25%3A28Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-31T18%3A59%3A28Z&ske=2022-11-07T18%3A59%3A28Z&sks=b&skv=2021-08-06&sig=R%2BSue4U7FRinRFQtZ9LuNuHeGR80mWlBGGaK7D8vrNc%3D"
     },
     task_id: "task-5NnGRQwjePyZUzEEE0OsL8iD",
     prompt_id: "prompt-xsmVMCmyzOUWUTiOxPzVMKoG",
@@ -114,7 +123,7 @@ const mockedData = [
     generation_type: "ImageGeneration",
     generation: {
       image_path:
-        "https://openailabsprodscus.blob.core.windows.net/private/user-3WDSburElMKHvQlefMA7xz6u/generations/generation-bdVeA7O0HylMZcnqlzJsdjzi/image.webp?st=2022-10-30T17%3A52%3A39Z&se=2022-10-30T19%3A50%3A39Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-30T18%3A49%3A27Z&ske=2022-11-06T18%3A49%3A27Z&sks=b&skv=2021-08-06&sig=09uvVzvvdsOa7TqBeN6xRiAMCNxXKK2aS8WMZXFI9nc%3D",
+      "https://openailabsprodscus.blob.core.windows.net/private/user-MLlIlQ6dug6zJcjPgf6LgSRp/generations/generation-UfpappJgRvR8SYENsPR4e2LI/image.webp?st=2022-10-31T21%3A27%3A28Z&se=2022-10-31T23%3A25%3A28Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/webp&skoid=15f0b47b-a152-4599-9e98-9cb4a58269f8&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-10-31T18%3A59%3A28Z&ske=2022-11-07T18%3A59%3A28Z&sks=b&skv=2021-08-06&sig=1eY8WSGKc5ERqH83D97dEfbQRs2Iq1net%2B0pKBxJjp8%3D"
     },
     task_id: "task-5NnGRQwjePyZUzEEE0OsL8iD",
     prompt_id: "prompt-xsmVMCmyzOUWUTiOxPzVMKoG",
