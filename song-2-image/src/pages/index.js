@@ -29,7 +29,6 @@ import DalleResultsRenderer, {
   mockedData,
   SkeletonLoader,
 } from "../components/DalleResultsRenderer/DalleResultsRenderer";
-import { StyledImage } from "../components/DalleResultsRenderer/DalleResultsRenderer.styles";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -87,6 +86,26 @@ const Home = () => {
         });
     }
   }, [selectedMusic, artStyle, ambience]);
+
+  
+
+  const generateVideo = () => {
+    console.log(imageLinks.length)
+    console.log(selectedMusic)
+    if(imageLinks.length > 0 && selectedMusic>=0) {
+      console.log("entered")
+      axios.put(
+        `http://localhost:9000/dalle_images/`
+        ,
+        {
+          track_id: selectedMusic.track_id,
+          images: imageLinks
+        }
+      ).then((res) => {
+        console.log(res)
+      })
+    }
+  }
 
   useEffect(() => {
     if (prepareDalleRes.length > 0) {
@@ -262,12 +281,18 @@ const Home = () => {
                 setSelectedImageLink={setImageLinks}
                 selectedIndex={index}
               />
-            ))
-          : prepareDalleRes.map(() => (<SkeletonLoader />))}
+            ))            
+          : prepareDalleRes.map(() => (<SkeletonLoader />))} 
+          {!loading && 
+            (<Button 
+              label="Generate Video" 
+              disabled={imageLinks.length!=results.length}
+              handleClick={()=>generateVideo() }/>)
+          }         
       </GenerationColumnContainer>
     );
   };
-  
+
   return (
     <div className={styles.container}>
       <Head>
