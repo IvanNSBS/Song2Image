@@ -24,7 +24,9 @@ import {
   redirectToSpotify,
   searchMusic,
 } from "../utils";
-import DalleResultsRenderer, { SkeletonLoader } from "../components/DalleResultsRenderer/DalleResultsRenderer";
+import DalleResultsRenderer, {
+  SkeletonLoader,
+} from "../components/DalleResultsRenderer/DalleResultsRenderer";
 
 const Home = () => {
   const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -43,6 +45,7 @@ const Home = () => {
   const [dalleQuery, setDalleQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(-1);
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -91,14 +94,14 @@ const Home = () => {
   }, [prepareDalleRes, artStyle, ambience]);
 
   const handleDalleGenarations = (index) => {
+    if (index == 0) setCount(prepareDalleRes.length);
     setLoading(true);
-    console.log("1289o73y12879eyqa wodk lasz")
+    console.log("1289o73y12879eyqa wodk lasz");
 
     if (index >= prepareDalleRes.length) {
-      setLoading(false);
       return;
     }
-    
+
     setDalleQuery(
       `${artStyle} ${prepareDalleRes[index].dalle_input} ${ambience}`
     );
@@ -116,6 +119,7 @@ const Home = () => {
         strophe: duplicateEntry.strophe,
       };
       setResults((oldArray) => [...oldArray, newEntry]);
+      setCount(count - 1);
     }
 
     handleDalleGenarations(index + 1);
@@ -144,6 +148,7 @@ const Home = () => {
             strophe: strophe,
           };
           setResults((oldArray) => [...oldArray, newEntry]);
+          setCount(count - 1);
         })
         .catch((err) => {
           console.log(err);
@@ -153,6 +158,14 @@ const Home = () => {
       setError(true);
     }
   };
+
+  console.log(count);
+
+  useEffect(() => {
+    if (count <= 0) {
+      setLoading(false);
+    }
+  }, [count]);
 
   const renderLogin = () => {
     return (
@@ -240,16 +253,14 @@ const Home = () => {
           onChange={(e) => setAmbience(e.target.value)}
           disabled={loading}
         />
-        {
-          !loading ?
-          (results.map((data) => (
-          <DalleResultsRenderer
-            dalleResults={data.dalleResult}
-            strophe={data.strophe}
-          />
-        ))) :
-          (prepareDalleRes.map(() => <SkeletonLoader/>))
-        }
+        {!loading
+          ? results.map((data) => (
+              <DalleResultsRenderer
+                dalleResults={data.dalleResult}
+                strophe={data.strophe}
+              />
+            ))
+          : prepareDalleRes.map(<SkeletonLoader />)}
       </GenerationColumnContainer>
     );
   };
