@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ContentLoader from "react-content-loader";
 import styled from "styled-components";
 
 export const ImagesContainer = styled.div`
@@ -54,4 +55,8 @@ export const StropheContainer = styled.p`
   line-height: 30px;
   white-space: pre-wrap;
   width: 500px;
+`;
+
+export const SkeletonContainer = styled(ContentLoader)`
+  margin: 30px 0;
 `;

@@ -2,19 +2,19 @@ import React, { useState } from "react";
 import {
   ImagesContainer,
   ResultsContainer,
+  SkeletonContainer,
   StropheContainer,
   StyledImage,
 } from "./DalleResultsRenderer.styles";
-import ContentLoader from "react-content-loader";
 
 export const SkeletonLoader = () => (
-  <ContentLoader
+  <SkeletonContainer
     speed={2}
     backgroundColor="#F3F3F3"
     foregroundColor="#ECEBEB"
     width={1200}
-    height={320}
-    viewBox="0 0 1200 320"
+    height={180}
+    viewBox="0 0 1200 180"
   >
     <rect height={180} width={180} x={0} y={0} rx={3} ry={3} />
     <rect height={180} width={180} x={192} y={0} rx={3} ry={3} />
@@ -26,7 +26,7 @@ export const SkeletonLoader = () => (
     <rect height={20} width={280} x={780} y={80} rx={3} ry={3} />
     <rect height={20} width={360} x={780} y={120} rx={3} ry={3} />
     <rect height={20} width={310} x={780} y={160} rx={3} ry={3} />
-  </ContentLoader>
+  </SkeletonContainer>
 );
 
 const DalleResultsRenderer = ({

@@ -14,4 +14,5 @@ export const InputWrapper = styled.input`
   font-family: 'Piazzolla';
   font-size: 20px;
   line-height: 31px;
+  margin-bottom: 20px;
 `; 
