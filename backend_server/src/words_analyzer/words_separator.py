@@ -10,7 +10,7 @@ def _valid_word(word: str):
         return False
 
 def _remove_invalid_characters_from_word(word: str):
-    return word.replace("?", "").replace("\n", " ").replace("\r", " ")
+    return word.replace("?", "").replace("\n", " ").replace("\r", " ").replace(",", "").replace(", ", " ")
 
 def _remove_words_that_arent_on_wordnet(words: List[str]):
     valid_words = [ word for word in words if _valid_word(word) ]
@@ -43,7 +43,7 @@ def verse_to_word_array(verse: str) -> List[str]:
     Converts a song verse to an array of words that are available on wordnet
     """
     only_valid_characters = _remove_invalid_characters_from_word(verse)
-    unique_words = list(dict.fromkeys(only_valid_characters.split(" ")))
+    unique_words = only_valid_characters.split(" ")
 
     output, _ = _remove_words_that_arent_on_wordnet(unique_words)
     return output

@@ -45,6 +45,11 @@ class MusicalBackendServer(object):
     def _response(self, request, code:int=200, msg=""):
         request.setResponseCode(code)
         request.setHeader("Access-Control-Allow-Origin", "*")
+        request.setHeader("Referrer-Policy", 'no-referrer')
+        request.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD, OPTIONS")
+        request.setHeader("Access-Control-Allow-Credentials", "true")
+        request.setHeader("Access-Control-Allow-Headers", "X-Requested-With, origin, content-type, accept")
+     
         return msg
 
     def _get_song_lyrics(self, title, artist=""):

@@ -57,12 +57,18 @@ def get_most_similar_words(musixmatch_phrase:str, song_verse: str, max_words: in
     verse_words_and_similarity = []
     output = []
 
+    index: int = 0
     for word in verse_words:
-        avg_similarity_with_musixmatch =  get_average_similarity(word, musixmatch_words)
-        verse_words_and_similarity.append((word, avg_similarity_with_musixmatch))
+        word = word.lower()
+        avg_similarity_with_musixmatch = get_average_similarity(word, musixmatch_words)
+        verse_words_and_similarity.append((word, index, avg_similarity_with_musixmatch))
+        index = index + 1
 
-    verse_words_and_similarity.sort(key=lambda tp: tp[1], reverse=True)
-    output = verse_words_and_similarity[0:output_length]
-
+    cp_verse_words_and_similarity = verse_words_and_similarity
+    cp_verse_words_and_similarity.sort(key=lambda tp: tp[2], reverse=True)
+    cp_verse_words_and_similarity = cp_verse_words_and_similarity[0:output_length]
+    cp_verse_words_and_similarity.sort(key=lambda tp: tp[1], reverse=False)
+    
+    output = cp_verse_words_and_similarity[0:output_length]
     output = [word for word, similarity in output]
     return output
