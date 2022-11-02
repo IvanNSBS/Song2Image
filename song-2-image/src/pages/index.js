@@ -20,13 +20,11 @@ import {
 } from "./index.styles";
 import {
   sortedDropdownOptions,
-  dropdownOptions,
   postSpotifyToken,
   redirectToSpotify,
   searchMusic,
 } from "../utils";
 import DalleResultsRenderer, {
-  mockedData,
   SkeletonLoader,
 } from "../components/DalleResultsRenderer/DalleResultsRenderer";
 
