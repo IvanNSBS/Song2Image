@@ -45,8 +45,8 @@ class MusicalBackendServer(object):
     def _response(self, request, code:int=200, msg=""):
         request.setResponseCode(code)
         request.setHeader("Access-Control-Allow-Origin", "*")
-        request.setHeader("Referrer-Policy", 'no-referrer')
         request.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD, OPTIONS")
+        request.setHeader("Referrer-Policy", 'no-referrer')
         request.setHeader("Access-Control-Allow-Credentials", "true")
         request.setHeader("Access-Control-Allow-Headers", "X-Requested-With, origin, content-type, accept")
      
@@ -95,9 +95,14 @@ class MusicalBackendServer(object):
         out.release()
         return self.song_video_path
 
-    @app.route('/dalle_images/', methods=['PUT'])
+    @app.route('/dalle_images/', methods=['POST', 'OPTIONS'])
     def receive_dalle_images(self, request):
-        content = json.loads(request.content.read())
+        content = request.content.read()
+        if content == b'':
+            return self._response(request, 200, "")
+
+        body = content.decode('utf-8')
+        content = json.loads(body)
         track_id = content['track_id']
         images_urls = content['images']
         track_duration_ms = get_track_duration(track_id)

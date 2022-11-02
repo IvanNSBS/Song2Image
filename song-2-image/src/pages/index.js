@@ -95,7 +95,7 @@ const Home = () => {
     if(imageLinks.length > 0 && selectedMusic>=0) {
 
       console.log("entered")
-      axios.put(
+      axios.post(
         `http://localhost:9000/dalle_images/`
         ,
         {

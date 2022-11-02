@@ -70,5 +70,5 @@ def get_most_similar_words(musixmatch_phrase:str, song_verse: str, max_words: in
     cp_verse_words_and_similarity.sort(key=lambda tp: tp[1], reverse=False)
     
     output = cp_verse_words_and_similarity[0:output_length]
-    output = [word for word, similarity in output]
+    output = [word for word, index, similarity in output]
     return output
