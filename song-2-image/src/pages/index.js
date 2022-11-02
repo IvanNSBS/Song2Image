@@ -94,18 +94,17 @@ const Home = () => {
     console.log(selectedMusic)
     if(imageLinks.length > 0 && selectedMusic>=0) {
 
-      const data = {
-        track_id: musicResults[selectedMusic].track_id,
-        images: imageLinks
-      }
-
-      const fileData = JSON.stringify(data);
-      const blob = new Blob([fileData], {type: "text/plain"});
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.download = 'filename.json';
-      link.href = url;
-      link.click();
+      console.log("entered")
+      axios.put(
+        `http://localhost:9000/dalle_images/`
+        ,
+        {
+          track_id: musicResults[selectedMusic].track_id,
+          images: imageLinks
+        }
+      ).then((res) => {
+        console.log(res)
+      })
 
     }
   }
