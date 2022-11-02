@@ -45,7 +45,7 @@ const Home = () => {
   const [ambience, setAmbience] = useState("");
   const [prepareDalleRes, setPrepareDalleRes] = useState([]);
   const [dalleQuery, setDalleQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState(mockedData);
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(-1);
   const [error, setError] = useState(false);
@@ -89,21 +89,24 @@ const Home = () => {
 
   
 
-  const generateVideo = () => {
+  const generateVideo = async () => {
     console.log(imageLinks.length)
     console.log(selectedMusic)
     if(imageLinks.length > 0 && selectedMusic>=0) {
-      console.log("entered")
-      axios.put(
-        `http://localhost:9000/dalle_images/`
-        ,
-        {
-          track_id: musicResults[selectedMusic].track_id,
-          images: imageLinks
-        }
-      ).then((res) => {
-        console.log(res)
-      })
+
+      const data = {
+        track_id: musicResults[selectedMusic].track_id,
+        images: imageLinks
+      }
+
+      const fileData = JSON.stringify(data);
+      const blob = new Blob([fileData], {type: "text/plain"});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = 'filename.json';
+      link.href = url;
+      link.click();
+
     }
   }
 
@@ -275,7 +278,7 @@ const Home = () => {
         {!loading
           ? results.map((data,index) => (
               <DalleResultsRenderer
-                dalleResults={data.dalleResult}
+                //dalleResults={data.dalleResult}
                 strophe={data.strophe}
                 selectedImageLink={imageLinks}
                 setSelectedImageLink={setImageLinks}
