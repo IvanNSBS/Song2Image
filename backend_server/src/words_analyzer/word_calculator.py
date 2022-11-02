@@ -50,15 +50,19 @@ def get_most_similar_words(musixmatch_phrase:str, song_verse: str, max_words: in
     :input max_words(str): Limits how many worlds will be returned in the outpuit to this value
     """
     musixmatch_words = musixmatch_snippet_to_array(musixmatch_phrase)
-    musixmatch_words_len = len(musixmatch_words)
     verse_words = verse_to_word_array(song_verse)
-    output_length = max_words if max_words <= musixmatch_words_len else musixmatch_words_len
+    output_length = max_words
 
     verse_words_and_similarity = []
     output = []
 
     index: int = 0
+    used = set()
     for word in verse_words:
+        if word in used:
+            continue
+
+        used.add(word)
         word = word.lower()
         avg_similarity_with_musixmatch = get_average_similarity(word, musixmatch_words)
         verse_words_and_similarity.append((word, index, avg_similarity_with_musixmatch))
@@ -69,6 +73,5 @@ def get_most_similar_words(musixmatch_phrase:str, song_verse: str, max_words: in
     cp_verse_words_and_similarity = cp_verse_words_and_similarity[0:output_length]
     cp_verse_words_and_similarity.sort(key=lambda tp: tp[1], reverse=False)
     
-    output = cp_verse_words_and_similarity[0:output_length]
-    output = [word for word, index, similarity in output]
+    output = [word for word, index, similarity in cp_verse_words_and_similarity]
     return output

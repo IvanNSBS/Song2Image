@@ -162,4 +162,24 @@ class MusicalBackendServer(object):
         override_spotipy(spotify_token)
         return self._response(request, 200, "overriding sucessfully")
 
+    @app.route('/api/<string:auth_token>', methods=['POST', 'OPTIONS'])
+    def mock_get_image(self, request, auth_token):
+        nguentomais = json.dumps({
+            'data': {
+                'result': {
+                    'id': "generation-90HVzHcQ7u9akdoS83Z9xVaQ",
+                    'object': "generation",
+                    'created': 1667142142,
+                    'generation_type': "ImageGeneration",
+                    'generation': {
+                        'image_path': "localhost:9001/0.webp"
+                    },
+                    'task_id': "task-5NnGRQwjePyZUzEEE0OsL8iD",
+                    'prompt_id': "prompt-xsmVMCmyzOUWUTiOxPzVMKoG",
+                    'is_public': False,
+                }
+            }
+        })
+        
+        return self._response(request, 200, nguentomais)
 

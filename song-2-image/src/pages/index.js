@@ -45,9 +45,8 @@ const Home = () => {
   const [ambience, setAmbience] = useState("");
   const [prepareDalleRes, setPrepareDalleRes] = useState([]);
   const [dalleQuery, setDalleQuery] = useState("");
-  const [results, setResults] = useState(mockedData);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(-1);
   const [error, setError] = useState(false);
   const [imageLinks,setImageLinks] = useState([]);
 
@@ -117,35 +116,42 @@ const Home = () => {
     }
   }, [prepareDalleRes, artStyle, ambience]);
 
-  const handleDalleGenarations = (index) => {
-    if (index == 0) setCount(prepareDalleRes.length);
-    setLoading(true);
+  const handleDalleGenarations = async (index, rslt) => {
+    if (index == 0) setLoading(true);
 
     if (index >= prepareDalleRes.length) {
+      console.log('printing results from end of recursion...')
+      console.log(rslt);
+      const sortedResults = rslt.sort((a, b) => a.index - b.index);
+      setResults(sortedResults)
+      setLoading(false)
       return;
     }
 
-    setDalleQuery(
-      `${artStyle} ${prepareDalleRes[index].dalle_input} ${ambience}`
-    );
-
-    const duplicateEntry = results.find(
-      (e) => e.dalleInput === prepareDalleRes[index].dalle_input
-    );
-
-    if (!duplicateEntry) {
-      getDalle2(prepareDalleRes[index].strophe);
-    } else {
-      const newEntry = {
-        dalleResult: duplicateEntry.result,
+    const dalleInput = `${artStyle} ${prepareDalleRes[index].dalle_input} ${ambience}`;
+    const duplicateEntry = rslt.find(
+      (e) => e.dalleInput === dalleInput
+      );
+    
+      if (!duplicateEntry) {
+        const newEntry = await getDalle2(prepareDalleRes[index].strophe, dalleInput, index);
+        if(newEntry !== undefined){
+          rslt.push(newEntry);
+        }
+      } else {
+        console.log('Duplicate entry!')
+        console.log(duplicateEntry);
+        const newEntry = {
+        index: index,
+        dalleResult: duplicateEntry.dalleResult,
         dalleInput: duplicateEntry.dalleInput,
         strophe: duplicateEntry.strophe,
       };
+      rslt.push(newEntry)
       setResults((oldArray) => [...oldArray, newEntry]);
-      setCount(count - 1);
     }
 
-    handleDalleGenarations(index + 1);
+    await handleDalleGenarations(index + 1, rslt);
   };
 
   const logout = () => {
@@ -153,40 +159,28 @@ const Home = () => {
     window.localStorage.removeItem("token");
   };
 
-  const getDalle2 = (strophe) => {
-    if (dalleToken != "" && dalleQuery != "") {
+  const getDalle2 = async (strophe, dalleInput, index) => {
+    if (dalleToken != "" && dalleInput != "") {
       setError(false);
 
-      fetch(`/api/dalle2?k=${dalleToken}&q=${dalleQuery}`, {
+      const res = await fetch(`/api/dalle2?k=${dalleToken}&q=${dalleInput}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       })
-        .then((res) => res.json())
-        .then((data) => {
-          const newEntry = {
-            dalleResult: data.result,
-            dalleInput: dalleQuery,
-            strophe: strophe,
-          };
-          setResults((oldArray) => [...oldArray, newEntry]);
-          setCount(count - 1);
-        })
-        .catch((err) => {
-          console.log(err);
-          setError(true);
-        });
+      const data = await res.json();
+      const newEntry = {
+          index: index,
+          dalleResult: data.result,
+          dalleInput: dalleInput,
+          strophe: strophe,
+        };
+      return newEntry;
     } else {
       setError(true);
     }
   };
-
-  useEffect(() => {
-    if (count <= 0) {
-      setLoading(false);
-    }
-  }, [count]);
 
   const renderLogin = () => {
     return (
@@ -257,9 +251,9 @@ const Home = () => {
           />
           <GenerationColumnContainer>
             <Button
-              disabled={!artStyle || !dalleQuery || loading || !ambience}
+              disabled={!artStyle || !dalleQuery || loading}
               label="Gerar imagens"
-              handleClick={() => handleDalleGenarations(0)}
+              handleClick={ () => handleDalleGenarations(0, []) }
             />
             <Select
               options={sortedDropdownOptions}
@@ -277,7 +271,7 @@ const Home = () => {
         {!loading
           ? results.map((data,index) => (
               <DalleResultsRenderer
-                //dalleResults={data.dalleResult}
+                dalleResults={data.dalleResult}
                 strophe={data.strophe}
                 selectedImageLink={imageLinks}
                 setSelectedImageLink={setImageLinks}
