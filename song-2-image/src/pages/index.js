@@ -48,7 +48,7 @@ const Home = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [imageLinks,setImageLinks] = useState([]);
+  const [imageLinks, setImageLinks] = useState([]);
 
   useEffect(() => {
     const hash = window.location.hash;
@@ -86,27 +86,21 @@ const Home = () => {
     }
   }, [selectedMusic, artStyle, ambience]);
 
-  
-
   const generateVideo = async () => {
-    console.log(imageLinks.length)
-    console.log(selectedMusic)
-    if(imageLinks.length > 0 && selectedMusic>=0) {
-
-      console.log("entered")
-      axios.post(
-        `http://localhost:9000/dalle_images/`
-        ,
-        {
+    console.log(imageLinks.length);
+    console.log(selectedMusic);
+    if (imageLinks.length > 0 && selectedMusic >= 0) {
+      console.log("entered");
+      axios
+        .post(`http://localhost:9000/dalle_images/`, {
           track_id: musicResults[selectedMusic].track_id,
-          images: imageLinks
-        }
-      ).then((res) => {
-        console.log(res)
-      })
-
+          images: imageLinks,
+        })
+        .then((res) => {
+          console.log(res);
+        });
     }
-  }
+  };
 
   useEffect(() => {
     if (prepareDalleRes.length > 0) {
@@ -120,34 +114,36 @@ const Home = () => {
     if (index == 0) setLoading(true);
 
     if (index >= prepareDalleRes.length) {
-      console.log('printing results from end of recursion...')
+      console.log("printing results from end of recursion...");
       console.log(rslt);
       const sortedResults = rslt.sort((a, b) => a.index - b.index);
-      setResults(sortedResults)
-      setLoading(false)
+      setResults(sortedResults);
+      setLoading(false);
       return;
     }
 
     const dalleInput = `${artStyle} ${prepareDalleRes[index].dalle_input} ${ambience}`;
-    const duplicateEntry = rslt.find(
-      (e) => e.dalleInput === dalleInput
+    const duplicateEntry = rslt.find((e) => e.dalleInput === dalleInput);
+
+    if (!duplicateEntry) {
+      const newEntry = await getDalle2(
+        prepareDalleRes[index].strophe,
+        dalleInput,
+        index
       );
-    
-      if (!duplicateEntry) {
-        const newEntry = await getDalle2(prepareDalleRes[index].strophe, dalleInput, index);
-        if(newEntry !== undefined){
-          rslt.push(newEntry);
-        }
-      } else {
-        console.log('Duplicate entry!')
-        console.log(duplicateEntry);
-        const newEntry = {
+      if (newEntry !== undefined) {
+        rslt.push(newEntry);
+      }
+    } else {
+      console.log("Duplicate entry!");
+      console.log(duplicateEntry);
+      const newEntry = {
         index: index,
         dalleResult: duplicateEntry.dalleResult,
         dalleInput: duplicateEntry.dalleInput,
         strophe: duplicateEntry.strophe,
       };
-      rslt.push(newEntry)
+      rslt.push(newEntry);
       setResults((oldArray) => [...oldArray, newEntry]);
     }
 
@@ -168,14 +164,14 @@ const Home = () => {
         headers: {
           "Content-Type": "application/json",
         },
-      })
+      });
       const data = await res.json();
       const newEntry = {
-          index: index,
-          dalleResult: data.result,
-          dalleInput: dalleInput,
-          strophe: strophe,
-        };
+        index: index,
+        dalleResult: data.result,
+        dalleInput: dalleInput,
+        strophe: strophe,
+      };
       return newEntry;
     } else {
       setError(true);
@@ -252,8 +248,8 @@ const Home = () => {
           <GenerationColumnContainer>
             <Button
               disabled={!artStyle || !dalleQuery || loading}
-              label="Gerar imagens"
-              handleClick={ () => handleDalleGenarations(0, []) }
+              label={dalleQuery ? "Gerar Imagens" : "Loading..."}
+              handleClick={() => handleDalleGenarations(0, [])}
             />
             <Select
               options={sortedDropdownOptions}
@@ -269,7 +265,7 @@ const Home = () => {
           disabled={loading}
         />
         {!loading
-          ? results.map((data,index) => (
+          ? results.map((data, index) => (
               <DalleResultsRenderer
                 dalleResults={data.dalleResult}
                 strophe={data.strophe}
@@ -277,14 +273,14 @@ const Home = () => {
                 setSelectedImageLink={setImageLinks}
                 selectedIndex={index}
               />
-            ))            
-          : prepareDalleRes.map(() => (<SkeletonLoader />))} 
-          {!loading && 
+            ))
+          : prepareDalleRes.map(() => <SkeletonLoader />)}
+        {/* {!loading && 
             (<Button 
               label="Generate Video" 
               disabled={imageLinks.length!=results.length}
               handleClick={()=>generateVideo() }/>)
-          }         
+          }          */}
       </GenerationColumnContainer>
     );
   };
