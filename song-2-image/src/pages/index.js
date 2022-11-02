@@ -98,7 +98,7 @@ const Home = () => {
         `http://localhost:9000/dalle_images/`
         ,
         {
-          track_id: selectedMusic.track_id,
+          track_id: musicResults[selectedMusic].track_id,
           images: imageLinks
         }
       ).then((res) => {
