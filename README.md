@@ -32,7 +32,17 @@ git clone https://github.com/IvanNSBS/Song2Image.git
 
 ### 2.2.3. Configurando o Dall-E 2
 
-1. adasd
+1. Acesse a página https://labs.openai.com/
+2. Crie sua conta do Dall-E 2
+3. Efetue o Login
+4. Abra o Developer Tools do navegador (F12)
+5. Clique na aba Network
+6. Escreva um prompt desejado e pressione o botão "Generate"
+7. Na aba Network procure por um fetch para o endpoint https://labs.openai.com/api/labs/tasks
+8. No Header da request procure pelo campo **authorization**
+9. Copie o token fornecido no campo **authorization**
+10. Remova o **Bearer** do inicio do token deixando apenas a parte **sess-** e o código que aparece em seguida
+11. Atribua o token a uma variável chamada **NEXT_PUBLIC_DALLE_TOKEN** no .env do projeto Front-end
 
 # 3. Executando o Projeto
 
