@@ -22,15 +22,29 @@ git clone https://github.com/IvanNSBS/Song2Image.git
 
 ## 2.2. Configurando o Projeto
 
-### 2.2.1. Configurando a sua conta do Spotify
+### 2.2.1 Criando os arquivos **.env**
+
+Para o projeto funcionar corretamente é necessária a criação de dois arquivos **.env**, sendo um para o Backend e outro para o Frontend. Os arquivos **.env** precisam estar nos diretórios **backend_server** e **song-2-image** respectivamente.
+
+No **.env** do Backend devemos definir as seguintes variáveis:
+1. **MUSIX_MATCH_API_KEY**
+2. **CLIENT_ID**
+3. **CLIENT_SECRET**
+
+E no **.env** do Front:
+1. **NEXT_PUBLIC_DALLE_TOKEN**
+2. **NEXT_PUBLIC_CLIENT_ID**
+3. **NEXT_PUBLIC_CLIENT_SECRET**
+
+### 2.2.2. Configurando a sua conta do Spotify
 
 1. asdsa
    
-### 2.2.2. Configurando o Musixmatch
+### 2.2.3. Configurando o Musixmatch
 
 1. asdsad
 
-### 2.2.3. Configurando o Dall-E 2
+### 2.2.4. Configurando o Dall-E 2
 
 1. Acesse a página https://labs.openai.com/
 2. Crie sua conta do Dall-E 2
@@ -42,7 +56,7 @@ git clone https://github.com/IvanNSBS/Song2Image.git
 8. No Header da request procure pelo campo **authorization**
 9. Copie o token fornecido no campo **authorization**
 10. Remova o **Bearer** do inicio do token deixando apenas a parte **sess-** e o código que aparece em seguida
-11. Atribua o token a uma variável chamada **NEXT_PUBLIC_DALLE_TOKEN** no .env do projeto Front-end
+11. Atribua o token a uma variável chamada **NEXT_PUBLIC_DALLE_TOKEN** no .env do projeto Frontend
 
 # 3. Executando o Projeto
 
@@ -88,3 +102,10 @@ O front-end será então compilado caso esteja sendo executado pela primeira vez
 5. Espere que o back-end termine de processar os dados da música e então clique em "Gerar Imagem". Enquanto o back-end está fazendo este processamento, o botão ficará desativado e terá um nome de "Loading".
 6. As imagens demorarão um pouco para ser geradas. No final, caso queira gerar mais imagens, atualize a página. Fique atento as limitações de token da sua conta do Dall-E 2, pois caso não hajam tokens o suficiente para gerar a música, a geração irá falhar e nunca completará
 
+# 4. Melhorias e Próximos Passos
+
+1. Playback do spotify
+2. Geração de vídeo com imagens geradas e música
+3. Animação de transição entre as imagens
+4. Melhora do algoritmo de NLP para encontrar as keywords
+5. Tradução de músicas em outras línguas
