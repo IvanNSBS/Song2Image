@@ -37,7 +37,7 @@ git clone https://github.com/IvanNSBS/Song2Image.git
 3. Efetue o Login
 4. Abra o Developer Tools do navegador (F12)
 5. Clique na aba Network
-6. Escreva um prompt desejado e pressione o botão "Generate"
+6. Escreva um prompt desejado na página do Dall-e e pressione o botão "Generate"
 7. Na aba Network procure por um fetch para o endpoint https://labs.openai.com/api/labs/tasks
 8. No Header da request procure pelo campo **authorization**
 9. Copie o token fornecido no campo **authorization**
