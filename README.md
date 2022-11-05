@@ -38,11 +38,43 @@ E no **.env** do Front:
 
 ### 2.2.2. Configurando a sua conta do Spotify
 
-1. asdsa
+1. Entre em no site de spotify developer: https://developer.spotify.com/
+    
+    ![](readme_images/1%20spotify%20dev%20home.PNG)
+2. Vá em dashboard e crie sua conta do Spotify developer
+    
+    ![](readme_images/2%20spotify%20dev%20log%20in.PNG)
+3. No seu dashboard crie um app
+    
+    ![](readme_images/3%20spotify%20dev%20create%20an%20app.PNG)
+4. Prencha os campos
+    
+    ![](readme_images/4%20spotify%20dev%20create%20app%20form.PNG)
+5. Pronto, logue abra o app e veja sua home page
+
+    ![](readme_images/5%20spotify%20dev%20example%20app%20home.PNG)
+6. Procure seu CLIENT_ID e CLIENT_SECRET
+
+    ![](readme_images/6%20spotify%20keys.PNG)
+7. Adicione os usuários do spotify além da sua própria conta que participará da versão de developer
+    
+    ![](readme_images/7%20spotify%20user%20add.PNG)
+8. Em Edit, vá em redirect URIs e adicione http://localhost:3000
+    
+    ![](readme_images/8%20Spotify%20edit%20settings.PNG)
    
 ### 2.2.3. Configurando o Musixmatch
 
-1. asdsad
+1. Entre em no site do musiXMatch developer: https://developer.musixmatch.com/
+
+    ![](readme_images/10%20musiXmatch%20dev%20login.PNG)
+2. Crie uma conta
+3. Vá na página do seu perfil
+4. Vá em Dashboard, depois em Applications, crie seu app e lá estará sua chave, MUSIX_MATCH_API_KEY
+
+    ![](readme_images/11%20musixmatch%20dashboard.PNG)
+    
+
 
 ### 2.2.4. Configurando o Dall-E 2
 
